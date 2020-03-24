@@ -56,14 +56,17 @@ public class MutationsProcessor {
 		wwriter.write("mutantIndex;mutantType;mutationTime;buildingTime");
 		wwriter.newLine();
 		wwriter.flush();
+		//crete just one copy of the folder
+		setupMutantFolder(0);
 		for (MutationLocation mutationLocation : locations) {
 			try {
 				Long mutationIni = System.currentTimeMillis();
-				setupMutantFolder(mutantIndex);
+				//setupMutantFolder(mutantIndex);
 				System.out.println("Mutant: " + mutantIndex + " - Type: " + mutationLocation.getType());
 				operator = factory.getOperator(mutationLocation.getType().getId());
-				mutantRootFolder = getMutantsRootFolder() + File.separator + getAppName() + "-mutant" + mutantIndex
-						+ File.separator;
+
+				//Same file name, same folder modified
+				mutantRootFolder = getMutantsRootFolder() + File.separator + getAppName() + "-mutant" + 0 + File.separator;
 				mutantFolder = mutantRootFolder + "src" + File.separator;
 				// The mutant should be written in mutantFolder
 

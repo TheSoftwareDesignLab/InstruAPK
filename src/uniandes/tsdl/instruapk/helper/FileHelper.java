@@ -24,6 +24,7 @@ public class FileHelper {
 
 			br.close();
 		} catch(FileNotFoundException e){
+			System.out.println(e.getMessage());
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();

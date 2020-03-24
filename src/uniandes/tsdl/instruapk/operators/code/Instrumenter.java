@@ -2,6 +2,7 @@ package uniandes.tsdl.instruapk.operators.code;
 
 import java.io.BufferedWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.antlr.runtime.tree.CommonTree;
@@ -36,7 +37,12 @@ public class Instrumenter implements MutationOperator {
 			newLines.add(lines.get(i));
 		}
 
-		newLines.add("    test");
+		System.out.println(((ASTMutationLocation) location).getTree().getClass());
+		newLines.add("		sget-object v0, Ljava/lang/System;->out:Ljava/io/PrintStream;\n" +
+				"\n" +
+				"    const-string v1, \"RIP:" + mutantIndex + ":" + "" + ":" + ""+ ":" + new Date(System.currentTimeMillis()) + "\"\n" +
+				"\n" +
+				"    invoke-virtual {v0, v1}, Ljava/io/PrintStream;->println(Ljava/lang/String;)V \n");
 		
 		for(int i=tt.getLine(); i < lines.size() ; i++){
 			newLines.add(lines.get(i));

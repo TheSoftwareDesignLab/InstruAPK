@@ -144,7 +144,6 @@ public class SourceCodeProcessor {
 			}
 		}
 		return locations;
-
 	}
 
 	private static void appendLocations(HashMap<MutationType, List<MutationLocation>> source, HashMap<MutationType, List<MutationLocation>> target){
