@@ -44,7 +44,7 @@ public class Instrumenter implements MutationOperator {
 				"\n" +
 				"    invoke-virtual {v0, v1}, Ljava/io/PrintStream;->println(Ljava/lang/String;)V \n");
 		
-		for(int i=tt.getLine(); i < lines.size() ; i++){
+		for(int i=tt.getLine()	; i < lines.size() ; i++){
 			newLines.add(lines.get(i));
 		}
 //
