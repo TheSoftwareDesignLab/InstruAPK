@@ -34,11 +34,17 @@ public class Instrumenter implements MutationOperator {
 		}
 		int iter = t.getLine()-1;
 		String cLine = lines.get(iter);
-		while(!(cLine.startsWith(".method") && cLine.contains(t.getChild(0).toStringTree()))) {
+		String parameters = t.getChild(1).toStringTree();
+		parameters = parameters.split("\\)")[parameters.split("\\)").length-1];
+		parameters = parameters.trim();
+		if(!parameters.contains(";")){parameters = "";}
+		parameters = "(" + parameters + ")";
+		while(!(cLine.startsWith(".method") && cLine.contains(t.getChild(0).toStringTree())) && cLine.contains(parameters)) {
 			newLines.add(lines.get(iter));
 			iter++;
 			cLine = lines.get(iter);
 		}
+
 		for (int i = iter; i < (iter+(tt.getLine()-t.getLine())); i++) {
 			newLines.add(lines.get(i));
 		}
