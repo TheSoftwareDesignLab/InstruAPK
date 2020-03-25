@@ -115,8 +115,6 @@ public class ASTHelper {
 //			System.out.println(t.getFirstChildWithType(smaliParser.I_ORDERED_METHOD_ITEMS).getChildCount());
 //			System.out.println(t.toStringTree());
 			if(t.getFirstChildWithType(smaliParser.I_ORDERED_METHOD_ITEMS).getChildCount()>0) {
-				System.out.println(t.getChild(0).toStringTree());
-				System.out.println(t.getLine()+" "+t.getFirstChildWithType(smaliParser.I_ORDERED_METHOD_ITEMS).getLine());
 				resp.add(39);				
 			}
 		}
