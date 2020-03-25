@@ -5,27 +5,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.List;
-import java.util.Map;
-
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.TokenSource;
 import org.antlr.runtime.tree.CommonTree;
-import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.ASTParser;
-import org.eclipse.jdt.core.dom.CompilationUnit;
-
 import uniandes.tsdl.antlr.smaliParser;
 import uniandes.tsdl.jflex.smaliFlexLexer;
-import uniandes.tsdl.instruapk.detectors.code.visitors.ClassInstanceVisitor;
-import uniandes.tsdl.instruapk.detectors.code.visitors.MethodCallVO;
-import uniandes.tsdl.instruapk.detectors.code.visitors.MethodCallVisitor;
-import uniandes.tsdl.instruapk.detectors.code.visitors.MethodDeclarationVO;
-import uniandes.tsdl.instruapk.detectors.code.visitors.MethodDeclarationVisitor;
 import uniandes.tsdl.smali.LexerErrorInterface;
 
 public class ASTHelper {
