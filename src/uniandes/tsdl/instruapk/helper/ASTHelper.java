@@ -104,10 +104,18 @@ public class ASTHelper {
 		ArrayList<Integer> resp = new ArrayList<Integer>();
 
 		if(t.getType()==smaliParser.I_METHOD) {
-			System.out.println( "LINE: " + t.toStringTree());
-			if(t.toStringTree().contains("abstract"))
-				System.out.println("HAS::");
-			resp.add(39);
+
+//			System.out.println(t.getType()+" "+t.toStringTree());
+//			CommonTree tt = (CommonTree) t.getFirstChildWithType(smaliParser.I_ORDERED_METHOD_ITEMS);
+//			System.out.println(t.getLine());
+//			System.out.println(t.getFirstChildWithType(smaliParser.I_ORDERED_METHOD_ITEMS).getChildCount());
+//			System.out.println(t.toStringTree());
+			if(t.getFirstChildWithType(smaliParser.I_ORDERED_METHOD_ITEMS).getChildCount()>0) {
+				System.out.println(t.getChild(0).toStringTree());
+				System.out.println(t.getLine()+" "+t.getFirstChildWithType(smaliParser.I_ORDERED_METHOD_ITEMS).getLine());
+				resp.add(39);				
+			}
+
 		}
 		if(resp.size()>0) {
 			int[] ret = new int[resp.size()];
