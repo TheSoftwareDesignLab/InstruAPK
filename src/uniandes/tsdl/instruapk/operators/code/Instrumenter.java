@@ -21,7 +21,6 @@ public class Instrumenter implements MutationOperator {
 	@Override
 	public boolean performMutation(MutationLocation location, BufferedWriter writer, int mutantIndex) throws Exception {
 
-
 		ASTMutationLocation mLocation = (ASTMutationLocation) location;
 		CommonTree tt = (CommonTree) mLocation.getTree().getFirstChildWithType(smaliParser.I_ORDERED_METHOD_ITEMS);
 		CommonTree t = mLocation.getTree();
@@ -47,7 +46,7 @@ public class Instrumenter implements MutationOperator {
 
 		newLines.add("		sget-object v0, Ljava/lang/System;->out:Ljava/io/PrintStream;");
 		newLines.add("");
-		newLines.add("    const-string v1, \"RIP:" + mutantIndex + ":" + (new File(mLocation.getFilePath())).getName().split(".")[0] + ":" + t.getChild(0).toStringTree()+"\"");
+		newLines.add("    const-string v1, \"RIP:" + mutantIndex + ":" + (new File(mLocation.getFilePath())).getName() + ":" + t.getChild(0).toStringTree()+"\"");
 		newLines.add("");
 		newLines.add("    invoke-virtual {v0, v1}, Ljava/io/PrintStream;->println(Ljava/lang/String;)V");
 		newLines.add("");

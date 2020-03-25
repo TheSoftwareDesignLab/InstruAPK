@@ -100,65 +100,15 @@ public class ASTHelper {
 	}
 
 	public static int[] isValidLocation(CommonTree t){
-		//		if(t.getType()==159) {
-		//						System.out.println(t.toStringTree());
-		//						System.out.println(t.getType());
-		//			System.out.println(t.getChild(2));
-		//			System.out.println(t.getChild(3));
-		//			System.out.println(t.getChild(2).toStringTree().equals("Ljava/net/URI;") && t.getChild(3).toStringTree().equals("<init>") );
-		//		}
+
 		ArrayList<Integer> resp = new ArrayList<Integer>();
+
 		if(t.getType()==smaliParser.I_METHOD) {
-//			System.out.println(t.getType()+" "+t.toStringTree());
-//			CommonTree tt = (CommonTree) t.getFirstChildWithType(smaliParser.I_ORDERED_METHOD_ITEMS);
-//			System.out.println(tt.getLine());
+			System.out.println( "LINE: " + t.toStringTree());
+			if(t.toStringTree().contains("abstract"))
+				System.out.println("HAS::");
 			resp.add(39);
 		}
-		//		if(t.getType()==smaliParser.I_STATEMENT_FORMAT35c_METHOD) {
-		//			if(t.getFirstChildWithType(smaliParser.I_REGISTER_LIST).getChildCount()==3 
-		//					&& t.getFirstChildWithType(smaliParser.CLASS_DESCRIPTOR).toString().equals("Landroid/content/Intent;") 
-		//					&& t.getFirstChildWithType(smaliParser.SIMPLE_NAME).toString().equals("<init>")) {
-		//				resp.add(2);
-		//				resp.add(6);
-		//			} else if(t.getChild(2).toStringTree().equals("Ljava/io/File;") 
-		//					&& t.getChild(4).getChild(1)!=null && t.getChild(4).getChild(1).toStringTree().equals("Ljava/lang/String;")) {
-		//				resp.add(32);
-		//			} else if(t.getChild(2).toStringTree().equals("Ljava/net/URI;") 
-		//					&& t.getChild(3).toStringTree().equals("<init>")) {
-		//				resp.add(17);
-		//			} else if(t.getChild(1).getChildCount() > 1 
-		//					&& t.getChild(2).toStringTree().equals("Ljava/util/Date;") 
-		//					&& t.getChild(3).toStringTree().equals("<init>")) {
-		//				resp.add(19);
-		//			} else if(t.getChild(2).toStringTree().equals("Landroid/bluetooth/BluetoothAdapter;")
-		//					&& t.getChild(3).toStringTree().equals("getDefaultAdapter")
-		//					&& t.getChild(4).getChild(0).getChild(0).toStringTree().equals("Landroid/bluetooth/BluetoothAdapter;")) {
-		//				resp.add(16);
-		//			} else if(t.getChild(2).toStringTree().equals("Lorg/apache/http/params/HttpConnectionParams;")
-		//					&& t.getChild(3).toStringTree().equals("setConnectionTimeout")) {
-		//				resp.add(14);
-		//			} else if (isNullBackendServiceReturn(t)) {
-		//				resp.add(20);
-		//			} else if(t.getChild(2).toStringTree().equals("Landroid/graphics/Bitmap;")
-		//					&& t.getChild(3).toStringTree().equals("createScaledBitmap")) {
-		//				resp.add(35);
-		//			} else if(t.getChild(2).toStringTree().equals("Landroid/database/sqlite/SQLiteDatabase;")
-		//					&& t.getChild(3).toStringTree().equals("rawQuery")) {
-		//				resp.add(24);
-		//				resp.add(25);
-		//			} else if(t.getChild(2).toStringTree().equals("Landroid/database/Cursor;")
-		//					&& t.getChild(3).toStringTree().equals("close")) {
-		//				resp.add(23);
-		//			} else if(isNullInputStream(t)) {
-		//				resp.add(33);
-		//			} else if(isNullOutputStream(t)) {
-		//				resp.add(37);
-		//			} 
-		//
-		//			if(t.getChild(1).getChildCount()>1) {
-		//				resp.add(22);
-		//			}
-		//
 		if(resp.size()>0) {
 			int[] ret = new int[resp.size()];
 			for (int i=0; i < ret.length; i++)
@@ -167,49 +117,6 @@ public class ASTHelper {
 			}
 			return ret;				
 		}
-		//
-		//		} else if(t.getType()==191) {
-		//			if(t.getText().equals("putExtra")){ //InvalidKeyIntentPutExtra && NullValueIntentPutExtra
-		//				return new int[]{4, 7}; 
-		//			} else if(t.getText().equals("findViewById")) {
-		//				ArrayList<Integer> resp = new ArrayList<Integer>();
-		//				resp.add(27);
-		//				resp.add(31);
-		//				if (hasIPutAndIGet(t)!=null) {
-		//					resp.add(26);
-		//					resp.add(29);
-		//				}
-		//				int[] ret = new int[resp.size()];
-		//				for (int i=0; i < ret.length; i++)
-		//				{
-		//					ret[i] = resp.get(i).intValue();
-		//				}
-		//				return ret;				
-		//			} 
-		//		} else if(t.getType()==161) {
-		//			if(t.getChild(2).toStringTree().equals("Landroid/bluetooth/BluetoothAdapter;")
-		//					&& t.getChild(3).toStringTree().equals("isEnabled")
-		//					&& getFirstBrotherNamedOfType(smaliParser.I_STATEMENT_FORMAT21t, "if-eqz", t) != null
-		//					&& getFirstBrotherNamedOfType(smaliParser.I_STATEMENT_FORMAT21t, "if-eqz", t).getLine()<(t.getLine()+5)) {
-		//				return new int[]{15};
-		//			}
-		//		} else if(t.getType() == smaliParser.I_LOCAL) {
-		//			if (t.getChild(2).toString().equals("Landroid/location/Location;")) {
-		//				return new int[] {18};
-		//			} else if(t.getChild(2).toString().equals("Lorg/apache/http/HttpResponse;")) {
-		//				return new int[] {13,20};
-		//			}  
-		//		} else if(t.getType() == smaliParser.I_METHOD) {
-		//			if (isOnCreateMethod(t)) {
-		//				return new int[] {38};
-		//			} else if(isOnClickMethod(t)) {
-		//				return new int[] {36};
-		//			}
-		//		}
-		//
-		//		//		} else if(false){//View.OnClickListener
-		//		//			return new int[]{30};	
-		//		//		} 
 		return new int[]{-1};
 	}
 

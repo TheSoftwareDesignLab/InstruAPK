@@ -24,9 +24,6 @@ public class TreeVisitorInstance extends TreeVisitor{
 		CommonTree t = (CommonTree) tt;
 		int[] muTypes = ASTHelper.isValidLocation(t);
 		if(muTypes[0]!=-1){
-//			System.out.println(t.toStringTree());
-//			System.out.println(t.getChildIndex());
-//			System.out.println(t.getParent().getChild(t.getChildIndex()).toStringTree());
 			calls.add(new APICallVO(t, t.getLine(), filePath, muTypes));
 		}
 		return super.visit(t, action);
