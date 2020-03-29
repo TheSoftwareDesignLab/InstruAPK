@@ -103,8 +103,9 @@ public class ASTHelper {
 
 		ArrayList<Integer> resp = new ArrayList<Integer>();
 
-		if(t.getType()==smaliParser.I_METHOD) {
-			if(t.getFirstChildWithType(smaliParser.I_ORDERED_METHOD_ITEMS).getChildCount()>0) {
+		if(t.getType()==smaliParser.I_METHOD ) {
+
+			if(t.getFirstChildWithType(smaliParser.I_ORDERED_METHOD_ITEMS).getChildCount()>0 && !t.getChild(0).toStringTree().equals("<init>")) {
 				resp.add(39);				
 			}
 		}

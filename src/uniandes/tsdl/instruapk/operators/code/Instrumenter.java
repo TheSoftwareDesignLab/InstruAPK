@@ -22,6 +22,9 @@ public class Instrumenter implements MutationOperator {
 	public boolean performMutation(MutationLocation location, BufferedWriter writer, int mutantIndex) throws Exception {
 
 		ASTMutationLocation mLocation = (ASTMutationLocation) location;
+		if((new File(mLocation.getFilePath())).getName().contains("$")){
+			return true;
+		}
 		CommonTree tt = (CommonTree) mLocation.getTree().getFirstChildWithType(smaliParser.I_ORDERED_METHOD_ITEMS);
 		CommonTree t = mLocation.getTree();
 
@@ -39,20 +42,22 @@ public class Instrumenter implements MutationOperator {
 		parameters = parameters.trim();
 		if(!parameters.contains(";")){parameters = "";}
 		parameters = "(" + parameters + ")";
-		System.out.println("Line before: " + cLine + " Parameters: " + parameters);
+		//System.out.println("Line before: " + cLine + " Parameters: " + parameters);
 		while(!(cLine.startsWith(".method") && cLine.contains(t.getChild(0).toStringTree()) && cLine.contains(parameters)) ) {
-			System.out.println("Line while: " + cLine + " Parameters: " + parameters);
+			//System.out.println("Line while: " + cLine + " Parameters: " + parameters);
 			newLines.add(lines.get(iter));
 			iter++;
 			cLine = lines.get(iter);
 		}
-		System.out.println("Line After: " + cLine + " Parameters: " + parameters);
+//		System.out.println("Line After: " + cLine + " Parameters: " + parameters);
 
 		for (int i = iter; i < (iter+(tt.getLine()-t.getLine())); i++) {
 			newLines.add(lines.get(i));
 		}
 		iter=(iter+(tt.getLine()-t.getLine()));
-
+		newLines.add(lines.get(iter++));
+		newLines.add((lines.get(iter++)));
+		newLines.add("");
 		newLines.add("		sget-object v0, Ljava/lang/System;->out:Ljava/io/PrintStream;");
 		newLines.add("");
 		newLines.add("    const-string v1, \"RIP:" + mutantIndex + ":" + (new File(mLocation.getFilePath())).getName() + ":" + t.getChild(0).toStringTree()+"\"");
