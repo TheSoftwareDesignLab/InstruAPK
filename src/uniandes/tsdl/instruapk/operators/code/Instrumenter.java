@@ -60,7 +60,7 @@ public class Instrumenter implements MutationOperator {
 		newLines.add("");
 		newLines.add("		sget-object v0, Ljava/lang/System;->out:Ljava/io/PrintStream;");
 		newLines.add("");
-		newLines.add("    const-string v1, \"RIP:" + mutantIndex + ":" + (new File(mLocation.getFilePath())).getName() + ":" + t.getChild(0).toStringTree()+"\"");
+		newLines.add("    const-string v1, \"RIP:" + mutantIndex + ":" + (new File(mLocation.getFilePath())).getName().split("\\.")[0] + ":" + t.getChild(0).toStringTree()+"\"");
 		newLines.add("");
 		newLines.add("    invoke-virtual {v0, v1}, Ljava/io/PrintStream;->println(Ljava/lang/String;)V");
 		newLines.add("");
