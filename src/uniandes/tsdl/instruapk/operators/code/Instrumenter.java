@@ -43,13 +43,15 @@ public class Instrumenter implements MutationOperator {
 		if(!parameters.contains(";")){parameters = "";}
 		parameters = "(" + parameters + ")";
 		//System.out.println("Line before: " + cLine + " Parameters: " + parameters);
-		while(!(cLine.startsWith(".method") && cLine.contains(t.getChild(0).toStringTree()) && cLine.contains(parameters)) ) {
+		System.out.println("child: " + t.getChild(0).toStringTree());
+		System.out.println("paramst: " + parameters );
+		while( /*Line should be a method*/ !(cLine.startsWith(".method") /*Line should contain the name of the method*/ && cLine.contains(t.getChild(0).toStringTree()) /*Line should contain the parameters.*/  && cLine.contains(parameters)) ) {
 			//System.out.println("Line while: " + cLine + " Parameters: " + parameters);
 			newLines.add(lines.get(iter));
 			iter++;
 			cLine = lines.get(iter);
 		}
-//		System.out.println("Line After: " + cLine + " Parameters: " + parameters);
+		System.out.println("Line After: " + cLine + " Parameters: " + parameters);
 
 		for (int i = iter; i < (iter+(tt.getLine()-t.getLine())); i++) {
 			newLines.add(lines.get(i));
@@ -57,6 +59,7 @@ public class Instrumenter implements MutationOperator {
 		iter=(iter+(tt.getLine()-t.getLine()));
 		newLines.add(lines.get(iter++));
 		newLines.add((lines.get(iter++)));
+
 		newLines.add("");
 		newLines.add("		sget-object v0, Ljava/lang/System;->out:Ljava/io/PrintStream;");
 		newLines.add("");

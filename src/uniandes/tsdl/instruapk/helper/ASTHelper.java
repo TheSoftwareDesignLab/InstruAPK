@@ -105,7 +105,10 @@ public class ASTHelper {
 
 		if(t.getType()==smaliParser.I_METHOD ) {
 
-			if(t.getFirstChildWithType(smaliParser.I_ORDERED_METHOD_ITEMS).getChildCount()>0 && !t.getChild(0).toStringTree().equals("<init>") && !t.getChild(0).toStringTree().equals("<clinit>")) {
+			if(t.getFirstChildWithType(smaliParser.I_ORDERED_METHOD_ITEMS).getChildCount()>0
+					&& !t.getChild(0).toStringTree().equals("<init>")
+					&& !t.getChild(0).toStringTree().equals("<clinit>")
+			) {
 				resp.add(39);				
 			}
 		}

@@ -98,7 +98,7 @@ public class InstruAPK {
 		Helper.getInstance();
 		Helper.setPackageName(appName);
 		// Decode the APK
-		//APKToolWrapper.openAPK(apkPath, extraPath);
+		APKToolWrapper.openAPK(apkPath, extraPath);
 
 
 		//Text-Based operators selected
@@ -113,7 +113,6 @@ public class InstruAPK {
 		// //SourceCodeProcessor scp = SourceCodeProcessor.getInstance(); (not safe, if MPlus is executed on different apps)
 		SourceCodeProcessor scp = new SourceCodeProcessor(operatorBundle);
 		locations.putAll( scp.processFolder("temp", extraPath, appName));
-
 //		// //2.2. Call the detectors on each location in order to find any extra information required for each case.
 //		//		locations = scp.findExtraInfoRequired(locations);
 //

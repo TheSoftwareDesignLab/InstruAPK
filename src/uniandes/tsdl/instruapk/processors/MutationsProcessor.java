@@ -69,7 +69,6 @@ public class MutationsProcessor {
 				mutantRootFolder = getMutantsRootFolder() + File.separator + getAppName() + "-mutant" + 0 + File.separator;
 				mutantFolder = mutantRootFolder + "src" + File.separator;
 				// The mutant should be written in mutantFolder
-
 				newMutationPath = mutationLocation.getFilePath().replace(appFolder, mutantFolder);
 				// System.out.println(newMutationPath);
 				mutationLocation.setFilePath(newMutationPath);
@@ -94,6 +93,7 @@ public class MutationsProcessor {
 			mutantIndex++;
 		}
 		try {
+			System.out.println("Mutant Root Folder: " + mutantsRootFolder);
 			boolean result = APKToolWrapper.buildAPK(mutantRootFolder, extraPath, apkName, 0);
 			if(result) {FileUtils.deleteDirectory(new File(mutantRootFolder + "src" + File.separator));}
 		}catch (Exception e ){
