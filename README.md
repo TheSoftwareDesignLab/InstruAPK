@@ -1,4 +1,4 @@
-# MutAPK
+# InstruAPK
 MutAPK is a mutation analysis framework for Android applications over APK Files.
 MutAPK implements 35 mutation operators specifically for Android apps, covering the following categories:
 - Activity/Intents

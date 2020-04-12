@@ -22,9 +22,6 @@ public class Instrumenter implements MutationOperator {
 	public boolean performMutation(MutationLocation location, BufferedWriter writer, int mutantIndex) throws Exception {
 
 		ASTMutationLocation mLocation = (ASTMutationLocation) location;
-		if((new File(mLocation.getFilePath())).getName().contains("$")){
-			return true;
-		}
 		CommonTree tt = (CommonTree) mLocation.getTree().getFirstChildWithType(smaliParser.I_ORDERED_METHOD_ITEMS);
 		CommonTree t = mLocation.getTree();
 
@@ -37,35 +34,64 @@ public class Instrumenter implements MutationOperator {
 		}
 		int iter = t.getLine()-1;
 		String cLine = lines.get(iter);
+
+		// Take the line
 		String parameters = t.getChild(1).toStringTree();
-		parameters = parameters.split("\\)")[parameters.split("\\)").length-1];
-		parameters = parameters.trim();
-		if(!parameters.contains(";")){parameters = "";}
+		//Split it using the string I_METHOD_RETURN_TYPE and take the las part of it
+		parameters = parameters.split("I_METHOD_RETURN_TYPE")[parameters.split("I_METHOD_RETURN_TYPE").length-1];
+		//Add spaces between the ) because there could be some of them like this )) an the next steps don't work as we expect
+		parameters = parameters.replace(")"," ) ");
+		//Split the string by the )
+		parameters = parameters.split("\\)")[1];
+		//if(!parameters.contains(";")){parameters = "";}
+		//Add () because there could be methods without arguments
 		parameters = "(" + parameters + ")";
+		//Delete all the spaces in the string because we add some spaces in previous steps and when there is no arguments the string ends like (  ) which is not a valid value.
+		// Also, some times, there are spaces between words that makes the instrumenter never found the method with that arguments. (We do not yet were those spaces were added.)
+		parameters = parameters.replace(" ","");
+
+
+		//This lines are for log and they help with debug stuff.
+//		System.out.println("child: " + t.getChild(0).toStringTree());
+//		System.out.println("paramst: " + parameters );
+//		System.out.println("file: "+ (new File(mLocation.getFilePath())).getName().split("\\.")[0]);
+
 		//System.out.println("Line before: " + cLine + " Parameters: " + parameters);
-		System.out.println("child: " + t.getChild(0).toStringTree());
-		System.out.println("paramst: " + parameters );
-		while( /*Line should be a method*/ !(cLine.startsWith(".method") /*Line should contain the name of the method*/ && cLine.contains(t.getChild(0).toStringTree()) /*Line should contain the parameters.*/  && cLine.contains(parameters)) ) {
-			//System.out.println("Line while: " + cLine + " Parameters: " + parameters);
+		//When one or more variables are used inside the method, the line .locals should indicate how many variables are going to be use.
+		//In case the line indicates that zero or one variables are going to be use, we change the line to indicate that two is the right number of variables.
+		if(cLine.contains(".locals 0") || cLine.contains(".locals 1")){cLine = "	.locals 2";}
+		while( /*Line should be a method*/ !(cLine.startsWith(".method")
+				/*Line should contain the name of the method*/
+				&& cLine.contains(t.getChild(0).toStringTree())
+				/*Line should contain the parameters.*/
+				&& cLine.contains(parameters))
+			&& iter < lines.size()
+		) {
+			//System.out.println("Line while "+  iter + " : " + cLine + " Parameters: " + parameters);
+			if(cLine.contains(".locals 0") || cLine.contains(".locals 1")){cLine = "	.locals 2";}
 			newLines.add(lines.get(iter));
 			iter++;
 			cLine = lines.get(iter);
 		}
-		System.out.println("Line After: " + cLine + " Parameters: " + parameters);
+		//System.out.println("Line After: " + cLine + " Parameters: " + parameters);
 
 		for (int i = iter; i < (iter+(tt.getLine()-t.getLine())); i++) {
-			newLines.add(lines.get(i));
+			String line = lines.get(i);
+			if(line.contains(".locals 0") || line.contains(".locals 1")){line = "	.locals 2";}
+			newLines.add(line);
 		}
 		iter=(iter+(tt.getLine()-t.getLine()));
 		newLines.add(lines.get(iter++));
-		newLines.add((lines.get(iter++)));
+		//newLines.add((lines.get(iter++)));
 
+		// The method System.out.println("RIP:...") was changed for a Log.d("","RIP:...")
+		// because the latter makes a static call and it seems to be the right way when instrumenting like this.
 		newLines.add("");
-		newLines.add("		sget-object v0, Ljava/lang/System;->out:Ljava/io/PrintStream;");
+		newLines.add("	const-string v0, \"\" ");
 		newLines.add("");
 		newLines.add("    const-string v1, \"RIP:" + mutantIndex + ":" + (new File(mLocation.getFilePath())).getName().split("\\.")[0] + ":" + t.getChild(0).toStringTree()+"\"");
 		newLines.add("");
-		newLines.add("    invoke-virtual {v0, v1}, Ljava/io/PrintStream;->println(Ljava/lang/String;)V");
+		newLines.add("    invoke-static {v0, v1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I");
 		newLines.add("");
 
 		for(int i=iter; i < lines.size() ; i++){

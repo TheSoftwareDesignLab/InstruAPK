@@ -103,14 +103,12 @@ public class ASTHelper {
 
 		ArrayList<Integer> resp = new ArrayList<Integer>();
 
-		if(t.getType()==smaliParser.I_METHOD ) {
-
-			if(t.getFirstChildWithType(smaliParser.I_ORDERED_METHOD_ITEMS).getChildCount()>0
+		if(t.getType()==smaliParser.I_METHOD && t.getFirstChildWithType(smaliParser.I_ORDERED_METHOD_ITEMS).getChildCount()>0
+			//TODO perhaps it can be a potencial source of errors, it should be test with more applications.
 					&& !t.getChild(0).toStringTree().equals("<init>")
 					&& !t.getChild(0).toStringTree().equals("<clinit>")
-			) {
-				resp.add(39);				
-			}
+		) {
+			resp.add(39);
 		}
 		if(resp.size()>0) {
 			int[] ret = new int[resp.size()];
