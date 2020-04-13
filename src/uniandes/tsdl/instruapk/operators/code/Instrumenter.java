@@ -58,7 +58,7 @@ public class Instrumenter implements MutationOperator {
 
 		//System.out.println("Line before: " + cLine + " Parameters: " + parameters);
 		//When one or more variables are used inside the method, the line .locals should indicate how many variables are going to be use.
-		//In case the line indicates that zero or one variables are going to be use, we change the line to indicate that two is the right number of variables.
+		//In case the line indicates that zero or one variable is going to be used, we change the line to indicate that two is the right number of variables.
 		if(cLine.contains(".locals 0") || cLine.contains(".locals 1")){cLine = "	.locals 2";}
 		while( /*Line should be a method*/ !(cLine.startsWith(".method")
 				/*Line should contain the name of the method*/
@@ -91,7 +91,7 @@ public class Instrumenter implements MutationOperator {
 		newLines.add("");
 		newLines.add("    const-string v1, \"RIP:" + mutantIndex + ":" + (new File(mLocation.getFilePath())).getName().split("\\.")[0] + ":" + t.getChild(0).toStringTree()+"\"");
 		newLines.add("");
-		newLines.add("    invoke-static {v0, v1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I");
+		newLines.add("    invoke-static {v0, v1}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I");
 		newLines.add("");
 
 		for(int i=iter; i < lines.size() ; i++){
