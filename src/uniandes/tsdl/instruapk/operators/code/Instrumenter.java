@@ -3,13 +3,11 @@ package uniandes.tsdl.instruapk.operators.code;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.antlr.runtime.tree.CommonTree;
 
 import uniandes.tsdl.antlr.smaliParser;
-import uniandes.tsdl.instruapk.helper.ASTHelper;
 import uniandes.tsdl.instruapk.helper.FileHelper;
 import uniandes.tsdl.instruapk.helper.Helper;
 import uniandes.tsdl.instruapk.model.location.ASTMutationLocation;
@@ -42,21 +40,7 @@ public class Instrumenter implements MutationOperator {
 			System.out.println("Mutation was intended to be in synthetic method: \nName: " + t.getChild(0).toStringTree());
 		}else{
 			String cLine = lines.get(iter);
-			// Take the line
-			String parameters = t.getChild(1).toStringTree();
-			//Split it using the string I_METHOD_RETURN_TYPE and take the las part of it
-			parameters = parameters.split("I_METHOD_RETURN_TYPE")[parameters.split("I_METHOD_RETURN_TYPE").length-1];
-			//Add spaces between the ) because there could be some of them like this )) an the next steps don't work as we expect
-			parameters = parameters.replace(")"," ) ");
-			//Split the string by the )
-			parameters = parameters.split("\\)")[1];
-			//if(!parameters.contains(";")){parameters = "";}
-			//Add () because there could be methods without arguments
-			parameters = "(" + parameters + ")";
-			//Delete all the spaces in the string because we add some spaces in previous steps and when there is no arguments the string ends like (  ) which is not a valid value.
-			// Also, some times, there are spaces between words that makes the instrumenter never found the method with that arguments. (We do not yet were those spaces were added.)
-			parameters = parameters.replace(" ","");
-
+			String parameters = extractParameters(t.getChild(1).toStringTree());
 
 			//This lines are for log and they help with debug stuff.
 	//		System.out.println("child: " + t.getChild(0).toStringTree());
@@ -66,7 +50,7 @@ public class Instrumenter implements MutationOperator {
 			//System.out.println("Line before: " + cLine + " Parameters: " + parameters);
 			//When one or more variables are used inside the method, the line .locals should indicate how many variables are going to be use.
 			//In case the line indicates that zero or one variable is going to be used, we change the line to indicate that two is the right number of variables.
-			//if(cLine.contains(".locals 0") || cLine.contains(".locals 1")){cLine = "	.locals 2";}
+			cLine = checkLine(cLine);
 			while( /*Line should be a method*/ !(cLine.startsWith(".method")
 					/*Line should contain the name of the method*/
 					&& cLine.contains(t.getChild(0).toStringTree())
@@ -75,22 +59,21 @@ public class Instrumenter implements MutationOperator {
 				&& iter < lines.size()
 			) {
 				//System.out.println("Line while "+  iter + " : " + cLine + " Parameters: " + parameters);
-				//if(cLine.contains(".locals 0") || cLine.contains(".locals 1")){cLine = "	.locals 2";}
-				newLines.add(lines.get(iter));
+				newLines.add(cLine);
 				iter++;
 				cLine = lines.get(iter);
+				cLine = checkLine(cLine);
 			}
 			//System.out.println("Line After: " + cLine + " Parameters: " + parameters);
 
 			for (int i = iter; i < (iter+(tt.getLine()-t.getLine())); i++) {
 				String line = lines.get(i);
-				//if(line.contains(".locals 0") || line.contains(".locals 1")){line = "	.locals 2";}
+				line = checkLine(line);
 				newLines.add(line);
 			}
 			iter=(iter+(tt.getLine()-t.getLine()));
 			newLines.add(lines.get(iter++));
 			//newLines.add((lines.get(iter++)));
-
 
 			// The method System.out.println("RIP:...") was changed for a Log.d("","RIP:...")
 			// because the latter makes a static call and it seems to be the right way when instrumenting like this.
@@ -117,4 +100,22 @@ public class Instrumenter implements MutationOperator {
 		return true;
 	}
 
+	private String extractParameters(String parameters){
+		//Split it using the string I_METHOD_RETURN_TYPE and take the las part of it
+		parameters = parameters.split("I_METHOD_RETURN_TYPE")[parameters.split("I_METHOD_RETURN_TYPE").length-1];
+		//Add spaces between the ) because there could be some of them like this )) an the next steps don't work as we expect
+		parameters = parameters.replace(")"," ) ");
+		//Split the string by the )
+		parameters = parameters.split("\\)")[1];
+		//if(!parameters.contains(";")){parameters = "";}
+		//Add () because there could be methods without arguments
+		parameters = "(" + parameters + ")";
+		//Delete all the spaces in the string because we add some spaces in previous steps and when there is no arguments the string ends like (  ) which is not a valid value.
+		// Also, some times, there are spaces between words that makes the instrumenter never found the method with that arguments. (We do not yet were those spaces were added.)
+		return parameters.replace(" ","");
+	}
+	private String checkLine(String cLine){
+		if(cLine.contains(".locals 0") || cLine.contains(".locals 1")){cLine = "	.locals 2";}
+		return cLine;
+	}
 }
