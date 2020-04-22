@@ -23,17 +23,23 @@ public class APKToolWrapper {
 		System.out.println("Processing your APK...");
 		ps.waitFor();
 		System.out.println("Wow... that was an amazing APK to proccess!!! :D");
-		// InputStream es = ps.getErrorStream();
-		// byte e[] = new byte[es.available()];
-		// es.read(e,0,e.length);
-		// System.out.println("ERROR: "+ new String(e));
-		// InputStream is = ps.getInputStream();
-		// byte b[] = new byte[is.available()];
-		// is.read(b,0,b.length);
-		// System.out.println("INFO: "+new String(b));
-		// System.out.println(decodedPath);
 	}
 
+	//Same than openAPK but won't decode the resource files. Faster decoding. It will be use when there is no need for decoding the resources because they are not going to be edited.
+	public static void openAPKWithNoResources(String path, String extraPath) throws IOException, InterruptedException{
+		String decodedPath = Helper.getInstance().getCurrentDirectory();
+		// Creates folder for decoded app
+//		System.out.println(decodedPath);
+		File tempFolder = new File(decodedPath+File.separator+"temp");
+		if(tempFolder.exists()) {
+			tempFolder.delete();
+		}
+		tempFolder.mkdirs();
+		Process ps = Runtime.getRuntime().exec(new String[]{"java","-jar",Paths.get(decodedPath,extraPath,"apktool.jar").toAbsolutePath().toString(),"d",Paths.get(decodedPath,path).toAbsolutePath().toString(),"-o",Paths.get(decodedPath,"temp").toAbsolutePath().toString(),"-f","-r"});
+		System.out.println("Processing your APK...");
+		ps.waitFor();
+		System.out.println("Wow... that was an amazing APK to proccess!!! :D");
+	}
 	public static boolean buildAPK(String path, String extraPath, String appName, int mutantIndex) throws IOException, InterruptedException{
 		String decodedPath = Helper.getInstance().getCurrentDirectory();
 		Process ps = Runtime.getRuntime().exec(new String[]{"java","-jar",Paths.get(decodedPath,extraPath,"apktool.jar").toAbsolutePath().toString(),"b",Paths.get(decodedPath,path,"src").toAbsolutePath().toString(),"-o",Paths.get(decodedPath,path,appName).toAbsolutePath().toString(),"-f"});
@@ -46,16 +52,8 @@ public class APKToolWrapper {
 			System.out.println("SUCCESS: The "+mutantIndex+" mutant APK has been generated.");
 			return true;
 		} else {
-			System.out.println("ERROR: The "+mutantIndex+" mutant APK has not been generated.");
+			System.out.println("ERROR: The " + mutantIndex + " mutant APK has not been generated.");
 			return false;
 		}
-		//				InputStream es = ps.getErrorStream();
-		//				byte e[] = new byte[es.available()];
-		//				es.read(e,0,e.length);
-		//				System.out.println("ERROR: "+ new String(e));
-		//				InputStream is = ps.getInputStream();
-		//				byte b[] = new byte[is.available()];
-		//				is.read(b,0,b.length);
-		//				System.out.println("INFO: "+new String(b));
 	}
 }

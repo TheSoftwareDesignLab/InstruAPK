@@ -1,0 +1,187 @@
+Manifest-Version: 1.0
+Built-By: Generated-by-ADT
+Created-By: Android Gradle 3.2.1
+
+Name: AndroidManifest.xml
+SHA1-Digest: ofqe40E5QRfJPYCSMntlhbehs10=
+
+Name: classes.dex
+SHA1-Digest: iNMwN86nTUZym+9eOk/yeTqgWj4=
+
+Name: res/anim-v1/fade_in.xml
+SHA1-Digest: A9Z2FwgnvAVOeEzL5wkcgjBNOIU=
+
+Name: res/anim-v1/fade_out.xml
+SHA1-Digest: O1/ByKm7cTM6GKprozyiI+2iJAA=
+
+Name: res/anim-v1/layout_slide_back.xml
+SHA1-Digest: AMWKch43unYhPoPRRF06stZHOqA=
+
+Name: res/anim-v1/layout_slide_next.xml
+SHA1-Digest: HvmK+t/rDWYAN5/xORHvzBu5zXM=
+
+Name: res/anim-v1/slide_left.xml
+SHA1-Digest: YTIOf1MhpMKmN5nOQGkCpy6cAOo=
+
+Name: res/anim-v1/slide_right.xml
+SHA1-Digest: Anj4loVrGrHjCd4USN8WvU3BHl8=
+
+Name: res/anim/fade_in.xml
+SHA1-Digest: XsmoX3+oFH++Eu758/jPkQUc9D0=
+
+Name: res/anim/fade_out.xml
+SHA1-Digest: XsmoX3+oFH++Eu758/jPkQUc9D0=
+
+Name: res/anim/layout_slide_back.xml
+SHA1-Digest: T/a5KvcWIjTq9Ae2RmHsuPmf9zA=
+
+Name: res/anim/layout_slide_next.xml
+SHA1-Digest: T/a5KvcWIjTq9Ae2RmHsuPmf9zA=
+
+Name: res/anim/slide_left.xml
+SHA1-Digest: Sd65Y82uXzAXvt54R7aP6vA2hQ0=
+
+Name: res/anim/slide_right.xml
+SHA1-Digest: Sd65Y82uXzAXvt54R7aP6vA2hQ0=
+
+Name: res/color-v1/eden_text_menu_entry.xml
+SHA1-Digest: EgSEVngJdzobbioMeB26Ga2IuH0=
+
+Name: res/color/eden_text_menu_entry.xml
+SHA1-Digest: s7fGpnFks8f60p7EPF83Y85891Y=
+
+Name: res/drawable-land/background_vertical_gradient_green.jpg
+SHA1-Digest: GTX1jQALhDwHfMzICkkta7bqWZ4=
+
+Name: res/drawable-land/not_found.png
+SHA1-Digest: LOoe4inRz+pJpp1rzKLlYXuzBNQ=
+
+Name: res/drawable-port/background_vertical_gradient_green.jpg
+SHA1-Digest: eDFgz9Fvjb9Lk+jPuxy4HrxBvb0=
+
+Name: res/drawable-port/not_found.png
+SHA1-Digest: YGzHyQBxtwllIo64veE+SNqpkdc=
+
+Name: res/drawable-v1/background_vertical_gradient.xml
+SHA1-Digest: cRRmFCfAkXeYYDxuWw2EbdwLQnI=
+
+Name: res/drawable-v1/selector_glow.xml
+SHA1-Digest: TDwtc2xy/uAQjhL+/KBIMmlkiDQ=
+
+Name: res/drawable-v1/selector_glow_white.xml
+SHA1-Digest: /J5QjzeVnXpr5ebM04N0ZIluAJk=
+
+Name: res/drawable-v1/selector_glow_yellow.xml
+SHA1-Digest: o0csXj+ZUCRNfi34CdkcxfGi3+8=
+
+Name: res/drawable/application_icon.png
+SHA1-Digest: q+4AdStUXzgwvi5DCEduLT02ybg=
+
+Name: res/drawable/background_vertical_gradient.xml
+SHA1-Digest: 9nBjxMVJEpAT0hQ4SmchwHM5L9E=
+
+Name: res/drawable/boblee_buddyicon.jpg
+SHA1-Digest: qtoxsYk94cM2V+gkK7ch2XqfBDE=
+
+Name: res/drawable/default_buddyicon.jpg
+SHA1-Digest: yBo/scbiSZWbZBPCQu3iCRul+Lc=
+
+Name: res/drawable/ericktseng_buddyicon.jpg
+SHA1-Digest: JUBiLjYhSEnCyCCBJdZheBB9UGA=
+
+Name: res/drawable/glow_white.png
+SHA1-Digest: kAw7VNJ+coGBkTBj2SZB0M79A+s=
+
+Name: res/drawable/glow_yellow.png
+SHA1-Digest: 4SAPoCdbbVbSpLpEFWHbAhC02HE=
+
+Name: res/drawable/ic_menu_radar.png
+SHA1-Digest: EJLvVM9eshfxEF6aK2wFzf7s7HI=
+
+Name: res/drawable/not_found_small_1.png
+SHA1-Digest: WZhixXA8fbNFxd7Eu9sKecxo/k0=
+
+Name: res/drawable/not_found_small_2.png
+SHA1-Digest: vHyRefbaGeWVgwqZa8CjJ2gryh4=
+
+Name: res/drawable/romainguy_buddyicon.jpg
+SHA1-Digest: AV5EGmVloswYm2xnfIrbcG66FN8=
+
+Name: res/drawable/selector_glow.xml
+SHA1-Digest: eQnO873SndfFue0vrlR8x8KE+ts=
+
+Name: res/drawable/selector_glow_white.xml
+SHA1-Digest: 9nBjxMVJEpAT0hQ4SmchwHM5L9E=
+
+Name: res/drawable/selector_glow_yellow.xml
+SHA1-Digest: 9nBjxMVJEpAT0hQ4SmchwHM5L9E=
+
+Name: res/drawable/stat_notify.png
+SHA1-Digest: zqB4Cg7ksO+ndfgOO3Kr3z9/lWE=
+
+Name: res/layout-v1/crop_option.xml
+SHA1-Digest: 6BSWiV6RpWl/LfW/ggFkKmo9KLA=
+
+Name: res/layout-v1/grid_item_photo.xml
+SHA1-Digest: /KHVOnIoFnb9FFB7GM5WUOdd95o=
+
+Name: res/layout-v1/list_item_user.xml
+SHA1-Digest: ltBvznOPRxBpcqiRo5fyhb+XKHw=
+
+Name: res/layout-v1/screen_login.xml
+SHA1-Digest: ibWong6ei3ePMuVg+5F2KoaXg1c=
+
+Name: res/layout-v1/screen_photo.xml
+SHA1-Digest: acewykDet43b+Nk7B4+g9BRCh0g=
+
+Name: res/layout-v1/screen_photostream.xml
+SHA1-Digest: 2dSNXZoIaW8mDzRxVV1iOuuWU64=
+
+Name: res/layout-v1/shared_progress.xml
+SHA1-Digest: qrBlYcKbSnvppaxhyDDP2xaVnK0=
+
+Name: res/layout/crop_option.xml
+SHA1-Digest: niaOH2aMC2ivHuXhyeuZvGyq9Eo=
+
+Name: res/layout/grid_item_photo.xml
+SHA1-Digest: vAkUto2cnrn3Tc38eh2+kXiUdFo=
+
+Name: res/layout/list_item_user.xml
+SHA1-Digest: auhy2AlpCdzwgy63swTV/ACYMv0=
+
+Name: res/layout/screen_login.xml
+SHA1-Digest: RDWKRhGMOaAr8vXQha5dOO5Kyxs=
+
+Name: res/layout/screen_photo.xml
+SHA1-Digest: E3gigAta8wrmQlRMjOC71B2CwRg=
+
+Name: res/layout/screen_photostream.xml
+SHA1-Digest: 3vhBmXecoWwAc6Ij/bveD3sEFRM=
+
+Name: res/layout/shared_progress.xml
+SHA1-Digest: ko1rtZuPPhpSBjX62KFa/I8sYco=
+
+Name: res/menu-v1/login.xml
+SHA1-Digest: 8M99sJe60AoMQUQ0fymeXVM3vJI=
+
+Name: res/menu-v1/view_photo.xml
+SHA1-Digest: RSgt1SzPtm487hRhU1C2/RJIGz4=
+
+Name: res/menu/login.xml
+SHA1-Digest: iA1pwH3T3CG5nAZNeYOUkN59LzE=
+
+Name: res/menu/view_photo.xml
+SHA1-Digest: BmrkECzmoOUXUVA2wVSKRsg5ZW4=
+
+Name: res/raw/disclaimer
+SHA1-Digest: Ci+WuAFpVTmbqZE8VIEO2OMpfgo=
+
+Name: res/xml-v1/preferences.xml
+SHA1-Digest: RLVep4Te79qSfeAapPaQsiwz1HM=
+
+Name: res/xml/preferences.xml
+SHA1-Digest: aS2lwpWQl7+LGrHLaMOnmSa+Q3Y=
+
+Name: resources.arsc
+SHA1-Digest: IziIV7CbddkQCcF8m09jx64bDcM=
+

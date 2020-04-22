@@ -104,9 +104,15 @@ public class ASTHelper {
 		ArrayList<Integer> resp = new ArrayList<Integer>();
 
 		if(t.getType()==smaliParser.I_METHOD && t.getFirstChildWithType(smaliParser.I_ORDERED_METHOD_ITEMS).getChildCount()>0
-			//TODO perhaps it can be a potencial source of errors, it should be test with more applications.
+			//TODO Apparently the methods init and clinit cause problems when are edited, so this lines skip them.
+				//A file without at least a method different from these two is not going to be considered mutated and won't be displayed in the mutant folder
+				// but it will be use in the new apk version.
 					&& !t.getChild(0).toStringTree().equals("<init>")
 					&& !t.getChild(0).toStringTree().equals("<clinit>")
+				//TODO Methods with the symbol $ in their names are synthetic methods and can't be edited.
+				// Those methods are created when there is a nested class and one or more of its attributes were accessed.
+					//&& !t.getChild(0).toStringTree().contains("$")
+
 		) {
 			resp.add(39);
 		}
