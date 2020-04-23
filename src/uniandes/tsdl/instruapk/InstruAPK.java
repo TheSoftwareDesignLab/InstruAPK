@@ -132,12 +132,12 @@ public class InstruAPK {
 		printLocationList(mutationLocationList, mutantsFolder, appName);
 		System.out.println("Total Locations: "+mutationLocationList.size());
 
-		if(amountMutants>0) {
-			System.out.println("We have found: "+mutationLocationList.size()+" possible mutation points, we are going to select "+amountMutants+" of those");
-			mutationLocationList = selectMutants(amountMutants, locations);
-			System.out.println(mutationLocationList.size());
-		}
-
+//		if(amountMutants>0) {
+//			System.out.println("We have found: "+mutationLocationList.size()+" possible mutation points, we are going to select "+amountMutants+" of those");
+//			mutationLocationList = selectMutants(amountMutants, locations);
+//			System.out.println(mutationLocationList.size());
+//		}
+//
 //		//3. Run mutation phase
 		MutationsProcessor mProcessor = new MutationsProcessor("temp", appName, mutantsFolder);
 
