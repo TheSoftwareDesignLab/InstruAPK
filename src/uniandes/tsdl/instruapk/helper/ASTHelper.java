@@ -109,12 +109,29 @@ public class ASTHelper {
 				// but it will be use in the new apk version.
 					&& !t.getChild(0).toStringTree().equals("<init>")
 					&& !t.getChild(0).toStringTree().equals("<clinit>")
+					&& !t.getChild(0).toStringTree().contains("$")
+					&& (Integer.parseInt(((CommonTree) t.getFirstChildWithType(smaliParser.I_LOCALS)).getChild(0).toStringTree())>=2)
 				//TODO Methods with the symbol $ in their names are synthetic methods and can't be edited.
 				// Those methods are created when there is a nested class and one or more of its attributes were accessed.
 					//&& !t.getChild(0).toStringTree().contains("$")
 
 		) {
-			resp.add(39);
+//			boolean temp = false;
+//			if(t.getChild(0).toStringTree().equals("isValidType")) {
+//				System.out.println(t.toStringTree());
+//				t.getFirstChildWithType(smaliParser.I_ACCESS_LIST);
+//				CommonTree accessList = (CommonTree) t.getFirstChildWithType(smaliParser.I_ACCESS_LIST);
+//				for (Object child : t.getChildren()) {
+//					CommonTree childd = (CommonTree) child;
+////					if(childd.toStringTree().contains("final")) {
+////						temp=true;
+////					}
+//					System.out.println(childd.getType()+" "+childd.toStringTree());
+//				}
+//			}
+//			if(!temp) {
+				resp.add(39);
+//			}
 		}
 		if(resp.size()>0) {
 			int[] ret = new int[resp.size()];

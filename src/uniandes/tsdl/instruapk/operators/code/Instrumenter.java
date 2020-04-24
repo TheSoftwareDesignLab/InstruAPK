@@ -35,7 +35,7 @@ public class Instrumenter implements MutationOperator {
 		int iter = t.getLine()-1;
 
 		if(
-			/*Neither the methods with $ in their names because they are probably synthetic methods which are created when there is a nested class and one or more of its parameters are accessed*/
+				/*Neither the methods with $ in their names because they are probably synthetic methods which are created when there is a nested class and one or more of its parameters are accessed*/
 				t.getChild(0).toStringTree().contains("$")){
 			System.out.println("Mutation was intended to be in synthetic method: \nName: " + t.getChild(0).toStringTree());
 		}else{
@@ -43,9 +43,9 @@ public class Instrumenter implements MutationOperator {
 			String parameters = extractParameters(t.getChild(1).toStringTree());
 
 			//This lines are for log and they help with debug stuff.
-	//		System.out.println("child: " + t.getChild(0).toStringTree());
-	//		System.out.println("paramst: " + parameters );
-	//		System.out.println("file: "+ (new File(mLocation.getFilePath())).getName().split("\\.")[0]);
+			//		System.out.println("child: " + t.getChild(0).toStringTree());
+			//		System.out.println("paramst: " + parameters );
+			//		System.out.println("file: "+ (new File(mLocation.getFilePath())).getName().split("\\.")[0]);
 
 			//System.out.println("Line before: " + cLine + " Parameters: " + parameters);
 			//When one or more variables are used inside the method, the line .locals should indicate how many variables are going to be use.
@@ -59,7 +59,7 @@ public class Instrumenter implements MutationOperator {
 					/*Line should contain the parameters.*/
 					&& cLine.contains(parameters))
 					&& iter < lines.size()
-			) {
+					) {
 				//System.out.println("Line while "+  iter + " : " + cLine + " Parameters: " + parameters);
 				newLines.add(cLine);
 				iter++;
@@ -83,9 +83,9 @@ public class Instrumenter implements MutationOperator {
 
 			// The method System.out.println("RIP:...") was changed for a Log.d("","RIP:...")
 			// because the latter makes a static call and it seems to be the right way when instrumenting like this.
-				if(!greaterthan2) {
-					moveParametersSafeZone(newLines);
-				}
+//			if(!greaterthan2) {
+//				moveParametersSafeZone(newLines);
+//			}
 			newLines.add("");
 			newLines.add("    const-string v0, \"InstruAPK\"");
 			newLines.add("");
@@ -93,9 +93,9 @@ public class Instrumenter implements MutationOperator {
 			newLines.add("");
 			newLines.add("    invoke-static {v0, v1}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I");
 			newLines.add("");
-				if(!greaterthan2){
-					moveParametersInitialState(newLines);
-				}
+//			if(!greaterthan2){
+//				moveParametersInitialState(newLines);
+//			}
 		}
 
 		for(int i=iter; i < lines.size() ; i++){
@@ -127,7 +127,9 @@ public class Instrumenter implements MutationOperator {
 		return parameters.replace(" ","");
 	}
 	private String checkMethodLocals(String cLine){
-//		if(cLine.contains(".locals 0") || cLine.contains(".locals 1")){cLine = "	.locals 2";}
+//		if(cLine.contains(".locals 0") || cLine.contains(".locals 1")){
+//			cLine = "	.locals 2";
+//		}
 		return cLine;
 	}
 	private void greaterThan2(String cLine){
