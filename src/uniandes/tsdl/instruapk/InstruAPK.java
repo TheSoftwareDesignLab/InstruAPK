@@ -113,7 +113,7 @@ public class InstruAPK {
 		SourceCodeProcessor scp = new SourceCodeProcessor(operatorBundle);
 		locations.putAll( scp.processFolder("temp", extraPath, appName));
 //		// //2.2. Call the detectors on each location in order to find any extra information required for each case.
-		
+
 		Set<MutationType> keys = locations.keySet();
 		List<MutationLocation> list = null;
 		System.out.println("Amount Mutants	Mutation Operator");

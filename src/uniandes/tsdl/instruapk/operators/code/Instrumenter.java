@@ -106,6 +106,7 @@ public class Instrumenter implements MutationOperator {
 
 	private String lessThan2(String cLine, int mutantIndex){
 		if(cLine.equals("    .locals 0") || cLine.equals("    .locals 1")){
+			System.out.println("Register's number has been changed");
 			return "	.locals 2";
 		}
 		return  cLine;
