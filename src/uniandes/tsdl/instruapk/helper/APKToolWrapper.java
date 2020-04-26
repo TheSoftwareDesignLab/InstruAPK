@@ -9,27 +9,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class APKToolWrapper {
-
-	public static void openAPK(String path, String extraPath) throws IOException, InterruptedException{
-		String decodedPath = Helper.getInstance().getCurrentDirectory();
-		// Creates folder for decoded app
-//		System.out.println(decodedPath);
-		File tempFolder = new File(decodedPath+File.separator+"temp");
-		if(tempFolder.exists()) {
-			tempFolder.delete();
-		}
-		tempFolder.mkdirs();
-		Process ps = Runtime.getRuntime().exec(new String[]{"java","-jar",Paths.get(decodedPath,extraPath,"apktool.jar").toAbsolutePath().toString(),"d",Paths.get(decodedPath,path).toAbsolutePath().toString(),"-o",Paths.get(decodedPath,"temp").toAbsolutePath().toString(),"-f"});
-		System.out.println("Processing your APK...");
-		ps.waitFor();
-		System.out.println("Wow... that was an amazing APK to proccess!!! :D");
-	}
-
 	//Same than openAPK but won't decode the resource files. Faster decoding. It will be use when there is no need for decoding the resources because they are not going to be edited.
 	public static void openAPKWithNoResources(String path, String extraPath) throws IOException, InterruptedException{
 		String decodedPath = Helper.getInstance().getCurrentDirectory();
-		// Creates folder for decoded app
-//		System.out.println(decodedPath);
 		File tempFolder = new File(decodedPath+File.separator+"temp");
 		if(tempFolder.exists()) {
 			tempFolder.delete();

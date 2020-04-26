@@ -33,12 +33,12 @@ public class InstruAPK {
 
 	public static void main(String[] args) {
 		try {
-			// long initialTime = System.currentTimeMillis();
-			// System.out.println(initialTime);
+			 long initialTime = System.currentTimeMillis();
+			 System.out.println("Started at: " + initialTime);
 			runMutAPK(args);
-			// long finalTime = System.currentTimeMillis();
-			// System.out.println(finalTime);
-			// System.out.println(finalTime-initialTime);
+			 long finalTime = System.currentTimeMillis();
+			 System.out.println("Finalized at: " + finalTime);
+			 System.out.println("Total Time: "+ (finalTime-initialTime));
 
 		} catch (NumberFormatException e) {
 			System.out.println("Amount of mutants parameter is not a number!");
@@ -110,21 +110,16 @@ public class InstruAPK {
 
 		// //2. Run detection phase for AST-based detectors
 		// //2.1 Preprocessing: Find locations to target API calls (including calls to constructors)
-		// //SourceCodeProcessor scp = SourceCodeProcessor.getInstance(); (not safe, if MPlus is executed on different apps)
 		SourceCodeProcessor scp = new SourceCodeProcessor(operatorBundle);
 		locations.putAll( scp.processFolder("temp", extraPath, appName));
 //		// //2.2. Call the detectors on each location in order to find any extra information required for each case.
-//		//		locations = scp.findExtraInfoRequired(locations);
-//
+		
 		Set<MutationType> keys = locations.keySet();
 		List<MutationLocation> list = null;
 		System.out.println("Amount Mutants	Mutation Operator");
 		for (MutationType mutationType : keys) {
 			list = locations.get(mutationType);
 			System.out.println(list.size()+"		"+mutationType);
-			//			for (MutationLocation mutationLocation : list) {
-			//				System.out.println("File: "+mutationLocation.getFilePath()+", start line:" + mutationLocation.getStartLine()+", end line: "+mutationLocation.getEndLine()+", start column"+mutationLocation.getStartColumn());
-			//			}
 		}
 //
 //		//3. Build MutationLocation List
@@ -132,12 +127,6 @@ public class InstruAPK {
 		printLocationList(mutationLocationList, mutantsFolder, appName);
 		System.out.println("Total Locations: "+mutationLocationList.size());
 
-//		if(amountMutants>0) {
-//			System.out.println("We have found: "+mutationLocationList.size()+" possible mutation points, we are going to select "+amountMutants+" of those");
-//			mutationLocationList = selectMutants(amountMutants, locations);
-//			System.out.println(mutationLocationList.size());
-//		}
-//
 //		//3. Run mutation phase
 		MutationsProcessor mProcessor = new MutationsProcessor("temp", appName, mutantsFolder);
 

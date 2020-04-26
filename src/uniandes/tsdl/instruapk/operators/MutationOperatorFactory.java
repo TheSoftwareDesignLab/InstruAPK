@@ -30,14 +30,5 @@ public class MutationOperatorFactory {
 		
 		
 	}
-	
-	
-	/*public static void main(String[] args){
-		MutationOperator operator = null;
-		for(int i = 1; i <= 36; i++){
-			operator =  MutationOperatorFactory.getInstance().getOperator(i);
-			System.out.println(operator.getClass().getName());
-		}
-	}
-	*/
+
 }

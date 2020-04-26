@@ -12,7 +12,6 @@ public class HexadecimalGenerator {
 	    char [] s = new char[8];
 	    int     n = r.nextInt(0x1000000);
 
-//	    s[0] = '#';
 	    for (int i=0;i<8;i++) {
 	        s[i] = hex[n & 0xf];
 	        n >>= 4;

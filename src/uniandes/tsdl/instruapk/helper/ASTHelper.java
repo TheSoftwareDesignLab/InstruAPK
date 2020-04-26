@@ -26,13 +26,9 @@ public class ASTHelper {
 
 			LexerErrorInterface lexer = new smaliFlexLexer(reader);
 			((smaliFlexLexer)lexer).setSourceFile(smaliFile);
-			// System.out.println(((smaliFlexLexer)lexer).nextToken().getText());
 			CommonTokenStream tokens = new CommonTokenStream((TokenSource)lexer);
 			tokens.getTokens();
 			smaliParser parser = new smaliParser(tokens);
-			// parser.setVerboseErrors(options.verboseErrors);
-			// parser.setAllowOdex(options.allowOdexOpcodes);
-			// parser.setApiLevel(options.apiLevel);
 
 			smaliParser.smali_file_return result = parser.smali_file();
 			t = result.getTree();
@@ -104,34 +100,11 @@ public class ASTHelper {
 		ArrayList<Integer> resp = new ArrayList<Integer>();
 
 		if(t.getType()==smaliParser.I_METHOD && t.getFirstChildWithType(smaliParser.I_ORDERED_METHOD_ITEMS).getChildCount()>0
-			//TODO Apparently the methods init and clinit cause problems when are edited, so this lines skip them.
-				//A file without at least a method different from these two is not going to be considered mutated and won't be displayed in the mutant folder
-				// but it will be use in the new apk version.
-					&& !t.getChild(0).toStringTree().equals("<init>")
-					&& !t.getChild(0).toStringTree().equals("<clinit>")
-					&& !t.getChild(0).toStringTree().contains("$")
-					&& (Integer.parseInt(((CommonTree) t.getFirstChildWithType(smaliParser.I_LOCALS)).getChild(0).toStringTree())>=2)
-				//TODO Methods with the symbol $ in their names are synthetic methods and can't be edited.
-				// Those methods are created when there is a nested class and one or more of its attributes were accessed.
-					//&& !t.getChild(0).toStringTree().contains("$")
-
+				&& !t.getChild(0).toStringTree().equals("<init>")
+				&& !t.getChild(0).toStringTree().equals("<clinit>")
+				&& !t.getChild(0).toStringTree().contains("$")
 		) {
-//			boolean temp = false;
-//			if(t.getChild(0).toStringTree().equals("isValidType")) {
-//				System.out.println(t.toStringTree());
-//				t.getFirstChildWithType(smaliParser.I_ACCESS_LIST);
-//				CommonTree accessList = (CommonTree) t.getFirstChildWithType(smaliParser.I_ACCESS_LIST);
-//				for (Object child : t.getChildren()) {
-//					CommonTree childd = (CommonTree) child;
-////					if(childd.toStringTree().contains("final")) {
-////						temp=true;
-////					}
-//					System.out.println(childd.getType()+" "+childd.toStringTree());
-//				}
-//			}
-//			if(!temp) {
-				resp.add(39);
-//			}
+			resp.add(39);
 		}
 		if(resp.size()>0) {
 			int[] ret = new int[resp.size()];

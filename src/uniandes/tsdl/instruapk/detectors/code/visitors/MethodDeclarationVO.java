@@ -14,9 +14,6 @@ public class MethodDeclarationVO {
 		this.classQualifiedName = classQualifiedName;
 		this.methodName = methodName;
 	}
-	
-	
-	
 	public MethodDeclarationVO(String classQualifiedName, String methodName, int start, int length) {
 		super();
 		this.classQualifiedName = classQualifiedName;
@@ -24,11 +21,6 @@ public class MethodDeclarationVO {
 		this.start = start;
 		this.length = length;
 	}
-	
-	
-	
-
-
 
 	public MethodDeclarationVO(String classQualifiedName, String methodName, int line, int start, int length) {
 		super();
