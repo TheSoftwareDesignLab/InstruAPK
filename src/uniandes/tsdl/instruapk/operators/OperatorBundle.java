@@ -4,22 +4,9 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Set;
-
-import uniandes.tsdl.instruapk.detectors.xml.InvalidColorDetector;
-import uniandes.tsdl.instruapk.detectors.MutationLocationDetector;
-import uniandes.tsdl.instruapk.detectors.xml.ActivityNotDefinedDetector;
-import uniandes.tsdl.instruapk.detectors.xml.InvalidActivityNameDetector;
-import uniandes.tsdl.instruapk.detectors.xml.InvalidLabelDetector;
-import uniandes.tsdl.instruapk.detectors.xml.MissingPermissionDetector;
-import uniandes.tsdl.instruapk.detectors.xml.SDKVersionDetector;
-import uniandes.tsdl.instruapk.detectors.xml.WrongMainActivityDetector;
-import uniandes.tsdl.instruapk.detectors.xml.WrongStringResourceDetector;
-import uniandes.tsdl.instruapk.model.MutationType;
 
 public class OperatorBundle {
 
@@ -43,32 +30,6 @@ public class OperatorBundle {
 	
 	public boolean isOperatorSelected(String id) {
 		return bundle.containsKey(id);
-	}
-
-
-	public List<MutationLocationDetector> getTextBasedDetectors() {
-		List<MutationLocationDetector> textBasedDetectors = new ArrayList<>();
-		
-		
-		if(bundle.containsKey(MutationType.ACTIVITY_NOT_DEFINED.getId()+"")) {
-			textBasedDetectors.add(new ActivityNotDefinedDetector());
-		} if(bundle.containsKey(MutationType.INVALID_ACTIVITY_PATH.getId()+"")) {
-			textBasedDetectors.add(new InvalidActivityNameDetector());
-		} if(bundle.containsKey(MutationType.INVALID_LABEL.getId()+"")) {
-			textBasedDetectors.add(new InvalidLabelDetector());
-		} if(bundle.containsKey(MutationType.WRONG_MAIN_ACTIVITY.getId()+"")) {
-			textBasedDetectors.add(new WrongMainActivityDetector());
-		} if(bundle.containsKey(MutationType.MISSING_PERMISSION_MANIFEST.getId()+"")) {
-			textBasedDetectors.add(new MissingPermissionDetector());
-		} if(bundle.containsKey(MutationType.SDK_VERSION.getId()+"")) {
-			textBasedDetectors.add(new SDKVersionDetector());
-		} if(bundle.containsKey(MutationType.WRONG_STRING_RESOURCE.getId()+"")) {
-			textBasedDetectors.add(new WrongStringResourceDetector());
-		} if(bundle.containsKey(MutationType.INVALID_COLOR.getId()+"")) {
-			textBasedDetectors.add(new InvalidColorDetector());
-		}
-
-		return textBasedDetectors;
 	}
 	
 	public int getAmountOfSelectedOperators() {

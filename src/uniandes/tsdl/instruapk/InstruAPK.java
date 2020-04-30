@@ -2,22 +2,13 @@ package uniandes.tsdl.instruapk;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-import org.antlr.runtime.CommonTokenStream;
-import org.antlr.runtime.TokenSource;
-import org.antlr.runtime.tree.CommonTree;
-
-import uniandes.tsdl.antlr.smaliParser;
-import uniandes.tsdl.jflex.smaliFlexLexer;
-import uniandes.tsdl.instruapk.detectors.MutationLocationDetector;
 import uniandes.tsdl.instruapk.detectors.MutationLocationListBuilder;
 import uniandes.tsdl.instruapk.helper.APKToolWrapper;
 import uniandes.tsdl.instruapk.helper.Helper;
@@ -26,19 +17,17 @@ import uniandes.tsdl.instruapk.model.location.MutationLocation;
 import uniandes.tsdl.instruapk.operators.OperatorBundle;
 import uniandes.tsdl.instruapk.processors.MutationsProcessor;
 import uniandes.tsdl.instruapk.processors.SourceCodeProcessor;
-import uniandes.tsdl.instruapk.processors.TextBasedDetectionsProcessor;
-import uniandes.tsdl.smali.LexerErrorInterface;
 
 public class InstruAPK {
 
 	public static void main(String[] args) {
 		try {
-			 long initialTime = System.currentTimeMillis();
-			 System.out.println("Started at: " + initialTime);
-			runMutAPK(args);
-			 long finalTime = System.currentTimeMillis();
-			 System.out.println("Finalized at: " + finalTime);
-			 System.out.println("Total Time: "+ (finalTime-initialTime));
+			long initialTime = System.currentTimeMillis();
+			runInstruAPK(args);
+			System.out.println("Started at: " + new Date(initialTime));
+			long finalTime = System.currentTimeMillis();
+			System.out.println("Finalized at: " + new Date(finalTime));
+			System.out.println("Total Time: "+ ((finalTime-initialTime)/1000)+" seconds");
 
 		} catch (NumberFormatException e) {
 			System.out.println("Amount of mutants parameter is not a number!");
@@ -48,9 +37,9 @@ public class InstruAPK {
 		}
 	}
 
-	public static void runMutAPK(String[] args) throws NumberFormatException, Exception {
+	public static void runInstruAPK(String[] args) throws NumberFormatException, Exception {
 		//Usage Error
-		if (args.length < 6) {
+		if (args.length < 5) {
 			System.out.println("******* ERROR: INCORRECT USAGE *******");
 			System.out.println("Argument List:");
 			System.out.println("1. APK path");
@@ -58,8 +47,6 @@ public class InstruAPK {
 			System.out.println("3. Mutants path");
 			System.out.println("4. Binaries path");
 			System.out.println("5. Directory containing the operator.properties file");
-			System.out.println("6. Multithread generation (true/false)");
-			System.out.println("7. OPTIONAL Amount of mutants");
 			return;
 		}
 
@@ -70,12 +57,6 @@ public class InstruAPK {
 		String mutantsFolder = args[2];
 		String extraPath = args[3];
 		String operatorsDir = args[4];
-		boolean multithread = Boolean.parseBoolean(args[5]);
-		int amountMutants = -1;
-		if(args.length>6) {
-			amountMutants = Integer.parseInt(args[6]);
-		}
-
 
 		// Fix params based in OS
 		String os = System.getProperty("os.name").toLowerCase();
@@ -91,28 +72,18 @@ public class InstruAPK {
 		OperatorBundle operatorBundle = new OperatorBundle(operatorsDir);
 		System.out.println(operatorBundle.printSelectedOperators());
 
-		if(amountMutants>0 && operatorBundle.getAmountOfSelectedOperators()>amountMutants) {
-			throw new Exception("You must select as many mutants as selected operators, right now you select "+operatorBundle.getAmountOfSelectedOperators()+" operators but only ask for "+amountMutants+" mutants");
-		}
-
 		Helper.getInstance();
 		Helper.setPackageName(appName);
 		// Decode the APK
 		APKToolWrapper.openAPKWithNoResources(apkPath, extraPath);
 
-
-		//Text-Based operators selected
-		List<MutationLocationDetector> textBasedDetectors = operatorBundle.getTextBasedDetectors();
-
-		//1. Run detection phase for Text-based detectors
-		HashMap<MutationType, List<MutationLocation>> locations = TextBasedDetectionsProcessor.process("temp", textBasedDetectors);
-
+		//1. Create hashmap for locations
+		HashMap<MutationType, List<MutationLocation>> locations = new HashMap<>();
 
 		// //2. Run detection phase for AST-based detectors
-		// //2.1 Preprocessing: Find locations to target API calls (including calls to constructors)
+		// //2.1 Preprocessing: Find locations to target API calls
 		SourceCodeProcessor scp = new SourceCodeProcessor(operatorBundle);
 		locations.putAll( scp.processFolder("temp", extraPath, appName));
-//		// //2.2. Call the detectors on each location in order to find any extra information required for each case.
 
 		Set<MutationType> keys = locations.keySet();
 		List<MutationLocation> list = null;
@@ -121,50 +92,16 @@ public class InstruAPK {
 			list = locations.get(mutationType);
 			System.out.println(list.size()+"		"+mutationType);
 		}
-//
-//		//3. Build MutationLocation List
+		//
+		//	//3. Build MutationLocation List
 		List<MutationLocation> mutationLocationList = MutationLocationListBuilder.buildList(locations);
 		printLocationList(mutationLocationList, mutantsFolder, appName);
 		System.out.println("Total Locations: "+mutationLocationList.size());
 
-//		//3. Run mutation phase
+		//	//4. Run mutation phase
 		MutationsProcessor mProcessor = new MutationsProcessor("temp", appName, mutantsFolder);
+		mProcessor.process(mutationLocationList, extraPath, apkName);
 
-		if(multithread) {
-			mProcessor.processMultithreaded(mutationLocationList, extraPath, apkName);
-		} else {
-			mProcessor.process(mutationLocationList, extraPath, apkName);
-		}
-
-	}
-
-	private static List<MutationLocation> selectMutants(int amountMutants, HashMap<MutationType, List<MutationLocation>> locations) {
-
-		HashMap<MutationType, List<MutationLocation>> newLocations = new HashMap<MutationType, List<MutationLocation>>();
-		HashMap<MutationType, List<MutationLocation>> tempLocations = locations;
-		int newAmountMutants = amountMutants;
-
-		for(MutationType key : tempLocations.keySet()) {
-			if(tempLocations.get(key).size()>0) {
-				int selectedMutantNumber = (int)Math.random()*tempLocations.get(key).size();
-				MutationLocation selectedMutant =  tempLocations.get(key).get(selectedMutantNumber);
-				ArrayList temp = new ArrayList<MutationLocation>();
-				temp.add(selectedMutant);
-				newLocations.put(key, temp);
-				tempLocations.get(key).remove(selectedMutantNumber);
-				newAmountMutants--;
-			}
-		}
-		List<MutationLocation> mutationLocationList = MutationLocationListBuilder.buildList(tempLocations);
-		List<MutationLocation> newMutationLocationList = MutationLocationListBuilder.buildList(newLocations);
-
-		for (int i = 0; i < newAmountMutants; i++) {
-			int selectedMutantNumber = (int)Math.random()*mutationLocationList.size();
-			MutationLocation selectedMutant =  mutationLocationList.get(selectedMutantNumber);
-			newMutationLocationList.add(selectedMutant);
-			mutationLocationList.remove(selectedMutantNumber);
-		}
-		return newMutationLocationList;
 	}
 
 	private static void printLocationList(List<MutationLocation> mutationLocationList, String mutantsFolder, String appName) {

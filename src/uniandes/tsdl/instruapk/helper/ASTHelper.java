@@ -104,7 +104,7 @@ public class ASTHelper {
 				&& !t.getChild(0).toStringTree().equals("<clinit>")
 				&& !t.getChild(0).toStringTree().contains("$")
 		) {
-			resp.add(39);
+			resp.add(1);
 		}
 		if(resp.size()>0) {
 			int[] ret = new int[resp.size()];

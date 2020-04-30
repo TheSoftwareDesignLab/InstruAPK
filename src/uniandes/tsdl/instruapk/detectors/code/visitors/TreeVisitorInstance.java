@@ -6,7 +6,6 @@ import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.TreeVisitor;
 import org.antlr.runtime.tree.TreeVisitorAction;
 
-import uniandes.tsdl.antlr.smaliParser;
 import uniandes.tsdl.instruapk.helper.ASTHelper;
 
 public class TreeVisitorInstance extends TreeVisitor{

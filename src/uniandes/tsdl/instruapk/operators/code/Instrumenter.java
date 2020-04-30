@@ -15,9 +15,6 @@ import uniandes.tsdl.instruapk.model.location.MutationLocation;
 import uniandes.tsdl.instruapk.operators.MutationOperator;
 
 public class Instrumenter implements MutationOperator {
-	private boolean greaterThan2 = true;
-	private int maxParam = 0;
-	private int startParamsPosition = 0;
 	@Override
 	public boolean performMutation(MutationLocation location, BufferedWriter writer, int mutantIndex) throws Exception {
 

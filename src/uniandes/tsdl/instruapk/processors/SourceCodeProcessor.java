@@ -17,11 +17,7 @@ import java.util.logging.Logger;
 import org.antlr.runtime.tree.CommonTree;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
-import org.eclipse.jdt.core.dom.CompilationUnit;
-
 import uniandes.tsdl.instruapk.detectors.code.visitors.APICallVO;
-import uniandes.tsdl.instruapk.detectors.code.visitors.MethodCallVO;
-import uniandes.tsdl.instruapk.detectors.code.visitors.MethodDeclarationVO;
 import uniandes.tsdl.instruapk.detectors.code.visitors.TreeVisitorInstance;
 import uniandes.tsdl.instruapk.helper.ASTHelper;
 import uniandes.tsdl.instruapk.helper.Helper;
@@ -31,16 +27,6 @@ import uniandes.tsdl.instruapk.model.location.MutationLocation;
 import uniandes.tsdl.instruapk.operators.OperatorBundle;
 
 public class SourceCodeProcessor {
-
-	private HashSet<String> targetApis ;
-	private HashSet<String> targetDeclarations ;
-
-	private HashMap<String, List<Integer>> targetApisAndMutypes ;
-	private HashMap<String, List<Integer>> targeDeclarationsAndMutypes ;
-
-	private List<String> activities;
-	private List<String> serializableClasses;
-	private List<String> parcelableClasses;
 
 	private OperatorBundle operatorBundle;
 
@@ -57,13 +43,6 @@ public class SourceCodeProcessor {
 
 	public SourceCodeProcessor(OperatorBundle operatorBundle){
 		this.operatorBundle = operatorBundle;
-		targetApis = new HashSet<String>();
-		targetDeclarations = new HashSet<String>();
-		targetApisAndMutypes = new HashMap<>();
-		targeDeclarationsAndMutypes = new HashMap<>();
-		activities = new ArrayList<>();
-		serializableClasses = new ArrayList<>();
-		parcelableClasses = new ArrayList<>();
 		instance = this;
 	}
 
@@ -104,15 +83,14 @@ public class SourceCodeProcessor {
 		HashMap<MutationType, List<MutationLocation>> mutationLocations = new HashMap<>();
 
 		List<String> lines = new ArrayList<String>();
-		String unitName = filePath.substring(filePath.lastIndexOf(File.separator)+1).replace(".smali", "");
+		filePath.substring(filePath.lastIndexOf(File.separator)+1).replace(".smali", "");
 
 		MutationLocation location= null;
 		MutationType muType = null;
 
 		try {
 
-			//Reading the source code (file)
-			StringBuffer source  = readSourceFile(filePath, lines);
+			readSourceFile(filePath, lines);
 
 			//Getting AST from file
 			CommonTree cu = ASTHelper.getAST(filePath);
@@ -173,20 +151,5 @@ public class SourceCodeProcessor {
 		}
 		reader.close();
 		return source;
-	}
-
-	private int computeEndLine(List<String> lines, int startLine, int startColumn, int length) {
-
-		int endLine = startLine-1;
-		int count = 0;
-
-		do{
-			endLine+=1;
-			count += lines.get(endLine-1).length()-startColumn;	
-			startColumn = 0;
-		}while(count < length);
-
-
-		return endLine;
 	}
 }

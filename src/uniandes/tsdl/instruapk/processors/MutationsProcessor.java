@@ -78,7 +78,6 @@ public class MutationsProcessor {
 				String fileName = (new File(newMutationPath)).getName();
 				File mutantRootFolderDir = new File(mutantRootFolder+fileName);
 				FileUtils.copyFile(mutatedFile, mutantRootFolderDir);
-				File srcFolder = new File(mutantFolder);
 				Long buildEnd = System.currentTimeMillis();
 				Long mutationTime = mutationEnd-mutationIni;
 				Long buildingTime = buildEnd - mutationEnd;
