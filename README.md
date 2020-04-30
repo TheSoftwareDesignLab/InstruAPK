@@ -36,7 +36,12 @@ The output directory will contain a log file that summarise the mutant generatio
 The mutants folders are named with the corresponding mutant ID (i.e., numerical ID). The log file contains information about the mutation process as well as the type and location of each mutant generated.
 
 ### Instrumentation
-
-Add here the format of the instrumentation done inside the code
+The instrumentations has the following format
 
 ``InstruAPK:<methodIndex>:<fileName>:<methodName>:<methodParameters>``
+
+1. ``InstruAPK`` keyword that helps to identify all the output logcat lines related to the instrumentation.
+2. ``methodIndex`` Unique identifier of the method (also corresponds to the mutation number).
+3. ``fileName`` identifies the java class. As far as java files have the same names than the class defined inside them.
+4. ``methodName`` method's name
+5. ``methodParameters`` smali representation of the method's arguments. Some methods can be overloaded, and this helps developers to know the difference between those methods. The methodIndex can serves for the same purpose.
