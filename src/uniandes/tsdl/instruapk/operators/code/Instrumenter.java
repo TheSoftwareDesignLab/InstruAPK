@@ -66,11 +66,30 @@ public class Instrumenter implements MutationOperator {
 		// because the latter makes a static call and it seems to be the right way when instrumenting like this.
 		// Also, the same number of registers are needed when using sysout
 		newLines.add("");
-		newLines.add("    const-string v0, \"InstruAPK\"");
+		newLines.add("    new-instance v0, Ljava/lang/StringBuilder;");
 		newLines.add("");
-		newLines.add("    const-string v1, \"InstruAPK:" + mutantIndex + ":" + (new File(mLocation.getFilePath())).getName().split("\\.")[0] + ":" + t.getChild(0).toStringTree()+ ":"+ parameters +"\"");
+		newLines.add("    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V");
 		newLines.add("");
-		newLines.add("    invoke-static {v0, v1}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I");
+		newLines.add("    const-string v1, \"InstruAPK;;" + mutantIndex + ";;" + (new File(mLocation.getFilePath())).getName().split("\\.")[0] + ";;" + t.getChild(0).toStringTree()+ ";;"+ parameters + ";;"+"\"");
+		newLines.add("");
+		newLines.add("    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;");
+		newLines.add("");
+		newLines.add("    new-instance v1, Ljava/util/Date;");
+		newLines.add("");
+		newLines.add("    invoke-static {}, Ljava/lang/System;->currentTimeMillis()J");
+		newLines.add("");
+		newLines.add("    move-result-wide v2");
+		newLines.add("");
+		newLines.add("    invoke-direct {v1, v2, v3}, Ljava/util/Date;-><init>(J)V");
+		newLines.add("");
+		newLines.add("    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;");
+		newLines.add("");
+		newLines.add("    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;");
+		newLines.add("");
+		newLines.add("    move-result-object v0");
+		newLines.add("");
+		newLines.add("    const-string v1, \"InstruAPK\"");
+		newLines.add("    invoke-static {v1, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I");
 		newLines.add("");
 
 		for(int i=iter; i < lines.size() ; i++) {
@@ -102,9 +121,9 @@ public class Instrumenter implements MutationOperator {
 	}
 
 	private String lessThan2(String cLine, int mutantIndex){
-		if(cLine.equals("    .locals 0") || cLine.equals("    .locals 1")){
+		if(cLine.equals("    .locals 0") || cLine.equals("    .locals 1") || cLine.equals("    .locals 2") || cLine.equals("    .locals 3")){
 			System.out.println("Register's number has been changed");
-			return "	.locals 2";
+			return "	.locals 4";
 		}
 		return  cLine;
 	}
