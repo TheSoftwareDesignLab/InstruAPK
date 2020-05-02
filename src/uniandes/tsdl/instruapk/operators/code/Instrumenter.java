@@ -74,21 +74,18 @@ public class Instrumenter implements MutationOperator {
 		newLines.add("");
 		newLines.add("    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;");
 		newLines.add("");
-		newLines.add("    new-instance v1, Ljava/util/Date;");
-		newLines.add("");
 		newLines.add("    invoke-static {}, Ljava/lang/System;->currentTimeMillis()J");
 		newLines.add("");
-		newLines.add("    move-result-wide v2");
+		newLines.add("    move-result-wide v1");
 		newLines.add("");
-		newLines.add("    invoke-direct {v1, v2, v3}, Ljava/util/Date;-><init>(J)V");
-		newLines.add("");
-		newLines.add("    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;");
+		newLines.add("    invoke-virtual {v0, v1, v2}, Ljava/lang/StringBuilder;->append(J)Ljava/lang/StringBuilder;");
 		newLines.add("");
 		newLines.add("    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;");
 		newLines.add("");
 		newLines.add("    move-result-object v0");
 		newLines.add("");
 		newLines.add("    const-string v1, \"InstruAPK\"");
+		newLines.add("");
 		newLines.add("    invoke-static {v1, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I");
 		newLines.add("");
 
@@ -121,9 +118,9 @@ public class Instrumenter implements MutationOperator {
 	}
 
 	private String lessThan2(String cLine, int mutantIndex){
-		if(cLine.equals("    .locals 0") || cLine.equals("    .locals 1") || cLine.equals("    .locals 2") || cLine.equals("    .locals 3")){
+		if(cLine.equals("    .locals 0") || cLine.equals("    .locals 1") || cLine.equals("    .locals 2")){
 			System.out.println("Register's number has been changed");
-			return "	.locals 4";
+			return "	.locals 3";
 		}
 		return  cLine;
 	}
