@@ -10,6 +10,7 @@ import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.TokenSource;
 import org.antlr.runtime.tree.CommonTree;
 import uniandes.tsdl.antlr.smaliParser;
+import uniandes.tsdl.instruapk.model.MutationType;
 import uniandes.tsdl.jflex.smaliFlexLexer;
 import uniandes.tsdl.smali.LexerErrorInterface;
 
@@ -104,7 +105,7 @@ public class ASTHelper {
 				&& !t.getChild(0).toStringTree().equals("<clinit>")
 				&& !t.getChild(0).toStringTree().contains("$")
 		) {
-			resp.add(1);
+			resp.add(MutationType.INSTRUMENTER.getId());
 		}
 		if(resp.size()>0) {
 			int[] ret = new int[resp.size()];

@@ -15,7 +15,7 @@ The generated runnable jar can be found in: ``InstruAPK/target/InstruAPK-1.0.0.j
 # Usage
 To run InstruAPK use the following command, specifying the required arguments:
 ```
-java -jar InstruAPK-1.0.0.jar <APKPath> <AppPackage> <Output> <ExtraComponentFolder> <operatorsDir>
+java -jar InstruAPK-1.0.0.jar <APKPath> <AppPackage> <Output> <ExtraComponentFolder> <operatorsDir> | tee instrumentationReport.txt
 ```
 ### Arguments
 Provide the following list of required arguments when running MutAPK:
@@ -24,6 +24,7 @@ Provide the following list of required arguments when running MutAPK:
 3. ``Output``: relative path of the folder where the mutantns will be created;
 4. ``ExtraCompFolder``:  relative path of the extra component folder (``MutAPK/extra/``);
 5. ``operatorsDir``: relative path to the folder containing the operators.properties.
+6. The last command is for storign the console output and use it in other tools. (It can be omitted)
 
 ### Example
 ```
