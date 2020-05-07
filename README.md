@@ -1,6 +1,6 @@
 # InstruAPK
 
-InstruAPK is an open source tool for instrumenting APK Files. The instrumentation is done with the the purpose of collecting different coverage metrics when executing an APK under analysis. Current versions allows only for method coverage instrumentation
+InstruAPK is an open source tool for instrumenting APK Files. The instrumentation is done with the the purpose of collecting different coverage metrics when executing an APK under analysis. Current version allows only for method coverage instrumentation
 
 # Compile
 Download and compile InstruAPK with the following commands:
