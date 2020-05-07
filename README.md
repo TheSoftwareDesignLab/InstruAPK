@@ -1,6 +1,6 @@
 # InstruAPK
 
-InstruAPK is an open source tool for instrumenting APK Files. The instrumentation is done with the the purpose of collecting different coverage metrics when executing an APK under analysis. Current version allows only for method coverage instrumentation
+InstruAPK is an open source tool for instrumenting APK Files. The instrumentation is done with the the purpose of collecting different coverage metrics when executing an APK under analysis. Current version allows only for method coverage instrumentation. InstruAPK is built on top of the [MutAPK](https://thesoftwaredesignlab.github.io/MutAPK/) tool. Our idea is to implement instrumentation statements as "mutation operators" applied to the code. This allows for easy extension, because a new instrumentation can be implemented as a mutation operator by following the MutAPK code structure.
 
 # Compile
 Download and compile InstruAPK with the following commands:
@@ -18,8 +18,8 @@ To run InstruAPK use the following command, specifying the required arguments:
 java -jar InstruAPK-1.0.0.jar <APKPath> <AppPackage> <Output> <ExtraComponentFolder> <InstrOperatorsDir> | tee instrumentationReport.txt
 ```
 ### Arguments
-Provide the following list of required arguments when running MutAPK:
-1. ``APK path``: relative path of the apk to mutate;
+Provide the following list of required arguments when running InstruAPK:
+1. ``APK path``: relative path of the apk to instrument;
 2. ``AppPackage``: App main package name;
 3. ``Output``: relative path of the folder where the instrumented APK will be created;
 4. ``ExtraCompFolder``:  relative path of the extra component folder (``InstruAPK/extra/``);
@@ -33,8 +33,9 @@ java -jar .\target\InstruAPK-1.0.0.jar .\foo.apk or.foo.app .\output\ .\extra\ .
 ```
 
 ### Output
-The output directory will contain a log file that summarise the statements added to the smali code during the instrumentation process and a folder for the instrumented apk. 
-The instrumentations folders are named with the corresponding instrumenter ID (i.e., numerical ID). The log file contains information about the instrumentation process as well as the type and location of each mutant generated.
+The output directory will contains (i) a log file that summarizes the statements added to the smali code during the instrumentation process, and (ii) a folder for the instrumented apk. 
+
+The instrumentation folders are named with the corresponding instrumenter ID (i.e., numerical ID). The log file contains information about the instrumentation process as well as the type and location of each instrumentation operator.
 
 ### Instrumentation
 The instrumentations has the following format
