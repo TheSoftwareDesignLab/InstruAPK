@@ -29,7 +29,7 @@ Provide the following list of required arguments when running InstruAPK:
 ### Example
 ```
 cd InstruAPK
-java -jar .\target\InstruAPK-1.0.0.jar .\foo.apk or.foo.app .\output\ .\extra\ .\
+java -jar ./target/InstruAPK-1.0.0.jar ./foo.apk or.foo.app ./output/ ./extra/ ./
 ```
 
 ### Output
