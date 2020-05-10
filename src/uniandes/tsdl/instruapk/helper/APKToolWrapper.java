@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import uniandes.tsdl.instruapk.helper.Helper;
-
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -17,10 +16,11 @@ public class APKToolWrapper {
 			tempFolder.delete();
 		}
 		tempFolder.mkdirs();
+
 		Process ps = Runtime.getRuntime().exec(new String[]{"java","-jar",Paths.get(decodedPath,extraPath,"apktool.jar").toAbsolutePath().toString(),"d",Paths.get(decodedPath,path).toAbsolutePath().toString(),"-o",Paths.get(decodedPath,"temp").toAbsolutePath().toString(),"-f","-r"});
 		System.out.println("Processing your APK...");
 		ps.waitFor();
-		System.out.println("Wow... that was an amazing APK to proccess!!! :D");
+		System.out.println("Wow... that was an amazing APK to process!!! :D");
 	}
 	public static boolean buildAPK(String path, String extraPath, String appName, int mutantIndex) throws IOException, InterruptedException{
 		String decodedPath = Helper.getInstance().getCurrentDirectory();

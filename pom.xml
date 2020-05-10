@@ -5,7 +5,7 @@
 	<artifactId>InstruAPK</artifactId>
 	<version>1.0.0</version>
 	<name>InstruAPK</name>
-	<description>Android Application Intrumentation over APK files</description>
+	<description>Android Application Instrumentation over APK files</description>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<resources>

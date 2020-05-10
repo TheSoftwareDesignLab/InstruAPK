@@ -52,6 +52,7 @@ public class SourceCodeProcessor {
 		Collection<File> files = FileUtils.listFiles(new File(folderPath), TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
 		for (File file : files) {
 			if(file.getName().endsWith(".smali") && file.getCanonicalPath().contains(packageName.replace(".", Helper.isWindows()?"\\":"/"))
+					//TODO revisar si esto archivos deben ser editados o no
 					&& !file.getName().contains("$")
 					&& !file.getName().contains("EmmaInstrumentation.java") && !file.getName().contains("FinishListener.java") && !file.getName().contains("InstrumentedActivity.java") && !file.getName().contains("SMSInstrumentedReceiver.java")){
 				HashMap<MutationType, List<MutationLocation>> fileLocations = processFile(file.getAbsolutePath(), folderPath, extrasFolder);

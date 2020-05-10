@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +21,8 @@ import uniandes.tsdl.instruapk.processors.SourceCodeProcessor;
 
 public class InstruAPK {
 
+	public static final String MUTANTS_PATH = ".\\instruAPKOutput\\";
+	public static final String EXTRA_PATH = ".\\extra\\";
 	public static void main(String[] args) {
 		try {
 			long initialTime = System.currentTimeMillis();
@@ -61,9 +64,9 @@ public class InstruAPK {
 		// Fix params based in OS
 		String os = System.getProperty("os.name").toLowerCase();
 		if (os.indexOf("win") >= 0) {
-			mutantsFolder = mutantsFolder.replaceAll("/", File.separator)+File.separator;
-			extraPath = extraPath.replaceAll("/", File.separator)+File.separator;
-			apkPath = apkPath.replaceAll("/", File.separator);
+			mutantsFolder = mutantsFolder.replaceAll("[/]", "\\\\")+File.separator;
+			extraPath = extraPath.replaceAll("[/]", "\\\\")+File.separator;
+			apkPath = apkPath.replaceAll("[/]", "\\\\");
 			apkName = apkPath.substring(apkPath.lastIndexOf("\\"));
 		} else {
 			apkName = apkPath.substring(apkPath.lastIndexOf("/"));
