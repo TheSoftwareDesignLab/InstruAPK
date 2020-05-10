@@ -15,7 +15,7 @@ The generated runnable jar can be found in: ``InstruAPK/target/InstruAPK-1.0.0.j
 # Usage
 To run InstruAPK use the following command, specifying the required arguments:
 ```
-java -jar InstruAPK-1.0.0.jar <APKPath> <AppPackage> <Output> <ExtraComponentFolder> <InstrOperatorsDir> | tee instrumentationReport.txt
+java -jar InstruAPK-1.0.0.jar <APKPath> <AppPackage> <Output> <ExtraComponentFolder> <InstrOperatorsDir>
 ```
 ### Arguments
 Provide the following list of required arguments when running InstruAPK:
@@ -24,7 +24,6 @@ Provide the following list of required arguments when running InstruAPK:
 3. ``Output``: relative path of the folder where the instrumented APK will be created;
 4. ``ExtraCompFolder``:  relative path of the extra component folder (``InstruAPK/extra/``);
 5. ``InstrOperatorsDir``: relative path to the folder containing the operators.properties files for selecting the instrumentation operators.
-6. The last command is for storign the console output and use it in other tools. (It can be omitted)
 
 ### Example
 ```
@@ -47,4 +46,4 @@ The instrumentations has the following format
 3. ``fileName`` identifies the java class. As far as java files have the same names than the class defined inside them.
 4. ``methodName`` method's name
 5. ``methodParameters`` smali representation of the method's arguments. Some methods can be overloaded, and this helps developers to know the difference between those methods. The methodIndex can serves for the same purpose.
-6. ``callTimeInMillis`` exact time, in milliseconds, when the method was called
+6. ``callTimeInMillis`` timestamp in milliseconds, when a method was called. Multiple calls can happen in the same millisecond
