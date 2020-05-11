@@ -101,8 +101,7 @@ public class ASTHelper {
 		ArrayList<Integer> resp = new ArrayList<Integer>();
 
 		if(t.getType()==smaliParser.I_METHOD && t.getFirstChildWithType(smaliParser.I_ORDERED_METHOD_ITEMS).getChildCount()>0
-//				&& !t.getChild(0).toStringTree().equals("<init>")
-//				&& !t.getChild(0).toStringTree().equals("<clinit>")
+				//Synthetic methods are no instrumented
 				&& !t.getChild(0).toStringTree().contains("$")
 		) {
 			resp.add(MutationType.INSTRUMENTER.getId());
