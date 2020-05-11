@@ -65,12 +65,18 @@ public class Instrumenter implements MutationOperator {
 		// The method System.out.println("RIP:...") was changed for a Log.d("","RIP:...")
 		// because the latter makes a static call and it seems to be the right way when instrumenting like this.
 		// Also, the same number of registers are needed when using sysout
+		String methodName = t.getChild(0).toStringTree();
+		//File name TODO change for the real class name
+		String fileName = (new File(mLocation.getFilePath())).getName().split("\\.")[0];
+		location.setMethodName(methodName);
+		location.setClassName(fileName);
+		location.setMethodParameters(parameters);
 		newLines.add("");
 		newLines.add("    new-instance v0, Ljava/lang/StringBuilder;");
 		newLines.add("");
 		newLines.add("    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V");
 		newLines.add("");
-		newLines.add("    const-string v1, \"InstruAPK;;" + mutantIndex + ";;" + (new File(mLocation.getFilePath())).getName().split("\\.")[0] + ";;" + t.getChild(0).toStringTree()+ ";;"+ parameters + ";;"+"\"");
+		newLines.add("    const-string v1, \"InstruAPK;;" + mutantIndex + ";;" +  fileName + ";;" + methodName + ";;"+ parameters + ";;"+"\"");
 		newLines.add("");
 		newLines.add("    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;");
 		newLines.add("");

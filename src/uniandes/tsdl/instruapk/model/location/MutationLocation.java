@@ -11,6 +11,9 @@ public class MutationLocation {
 	private int startColumn;
 	private int endColumn;
 	private int length;
+	private String methodName;
+	private String className;
+	private String methodParameters;
 	
 	private MutationType type;
 	
@@ -29,19 +32,19 @@ public class MutationLocation {
 	public void setLine(int line) {
 		this.line = line;
 	}
-	
+
 	public int getStartColumn() {
 		return startColumn;
 	}
-	
+
 	public void setStartColumn(int startCoumn) {
 		this.startColumn = startCoumn;
 	}
-	
+
 	public int getEndColumn() {
 		return endColumn;
 	}
-	
+
 	public void setEndColumn(int endColumn) {
 		this.endColumn = endColumn;
 	}
@@ -62,7 +65,6 @@ public class MutationLocation {
 		this.endLine = endLine;
 	}
 
-	
 
 	public MutationType getType() {
 		return type;
@@ -80,7 +82,32 @@ public class MutationLocation {
 		this.length = length;
 	}
 
-	public static MutationLocation buildLocation( String path, int startLine, int endLine, int startCol, int endCol, int lineNum, int length, MutationType mType) {
+
+	public String getMethodName() {
+		return methodName;
+	}
+
+	public String getClassName() {
+		return className;
+	}
+
+	public String getMethodParameters() {
+		return methodParameters;
+	}
+
+	public void setMethodName(String methodName) {
+		this.methodName = methodName;
+	}
+
+	public void setClassName(String className) {
+		this.className = className;
+	}
+
+	public void setMethodParameters(String methodParameters) {
+		this.methodParameters = methodParameters;
+	}
+
+	public static MutationLocation buildLocation(String path, int startLine, int endLine, int startCol, int endCol, int lineNum, int length, MutationType mType) {
 		MutationLocation location = new MutationLocation();
 		location.setFilePath(path);
 		location.setStartLine(startLine);

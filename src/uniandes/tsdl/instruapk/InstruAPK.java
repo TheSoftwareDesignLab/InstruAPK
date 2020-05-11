@@ -98,13 +98,13 @@ public class InstruAPK {
 		//
 		//	//3. Build MutationLocation List
 		List<MutationLocation> mutationLocationList = MutationLocationListBuilder.buildList(locations);
-		printLocationList(mutationLocationList, mutantsFolder, appName);
 		System.out.println("Total Locations: "+mutationLocationList.size());
 
 		//	//4. Run mutation phase
 		MutationsProcessor mProcessor = new MutationsProcessor("temp", appName, mutantsFolder);
 		mProcessor.process(mutationLocationList, extraPath, apkName);
-
+		//Save the mutation list with all their information.
+		printLocationList(mutationLocationList, mutantsFolder, appName);
 	}
 
 	private static void printLocationList(List<MutationLocation> mutationLocationList, String mutantsFolder, String appName) {
@@ -126,17 +126,24 @@ public class InstruAPK {
 				writer.newLine();
 				writer.write("		\"filePath\":\""+temp.getFilePath()+"\",");
 				writer.newLine();
-				writer.write("		\"line\":\""+temp.getLine()+"\",");
+				//TODO these field aren't being used in the coverage analyzer, besides they don't have representative values as of now
+//				writer.write("		\"line\":\""+temp.getLine()+"\",");
+//				writer.newLine();
+//				writer.write("		\"startLine\":\""+temp.getStartLine()+"\",");
+//				writer.newLine();
+//				writer.write("		\"endLine\":\""+temp.getEndLine()+"\",");
+//				writer.newLine();
+//				writer.write("		\"startColumn\":\""+temp.getStartColumn()+"\",");
+//				writer.newLine();
+//				writer.write("		\"endColumn\":\""+temp.getEndColumn()+"\",");
+//				writer.newLine();
+//				writer.write("		\"length\":\""+temp.getLength()+"\",");
+//				writer.newLine();
+				writer.write("		\"methodName\":\""+temp.getMethodName()+"\",");
 				writer.newLine();
-				writer.write("		\"startLine\":\""+temp.getStartLine()+"\",");
+				writer.write("		\"fileName\":\""+temp.getClassName()+"\",");
 				writer.newLine();
-				writer.write("		\"endLine\":\""+temp.getEndLine()+"\",");
-				writer.newLine();
-				writer.write("		\"startColumn\":\""+temp.getStartColumn()+"\",");
-				writer.newLine();
-				writer.write("		\"endColumn\":\""+temp.getEndColumn()+"\",");
-				writer.newLine();
-				writer.write("		\"length\":\""+temp.getLength()+"\"");
+				writer.write("		\"methodParameters\":\""+temp.getMethodParameters()+"\"");
 				writer.newLine();
 				writer.write((i==mutationLocationList.size()-1)?"	}":"	},");
 				writer.newLine();
