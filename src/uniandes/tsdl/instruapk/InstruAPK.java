@@ -126,19 +126,6 @@ public class InstruAPK {
 				writer.newLine();
 				writer.write("		\"filePath\":\""+temp.getFilePath()+"\",");
 				writer.newLine();
-				//TODO these field aren't being used in the coverage analyzer, besides they don't have representative values as of now
-//				writer.write("		\"line\":\""+temp.getLine()+"\",");
-//				writer.newLine();
-//				writer.write("		\"startLine\":\""+temp.getStartLine()+"\",");
-//				writer.newLine();
-//				writer.write("		\"endLine\":\""+temp.getEndLine()+"\",");
-//				writer.newLine();
-//				writer.write("		\"startColumn\":\""+temp.getStartColumn()+"\",");
-//				writer.newLine();
-//				writer.write("		\"endColumn\":\""+temp.getEndColumn()+"\",");
-//				writer.newLine();
-//				writer.write("		\"length\":\""+temp.getLength()+"\",");
-//				writer.newLine();
 				writer.write("		\"methodName\":\""+temp.getMethodName()+"\",");
 				writer.newLine();
 				writer.write("		\"fileName\":\""+temp.getClassName()+"\",");

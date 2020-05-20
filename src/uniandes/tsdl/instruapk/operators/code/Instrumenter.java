@@ -61,6 +61,11 @@ public class Instrumenter implements MutationOperator {
 
 		iter=(iter+(tt.getLine()-t.getLine()));
 		newLines.add(lines.get(iter++));
+		if( iter < lines.size() && lines.get(iter).equals("    .end annotation")){
+			System.out.println("line inside: " + lines.get(iter));
+			newLines.add(lines.get(iter++));
+		}
+		//
 
 		// The method System.out.println("RIP:...") was changed for a Log.d("","RIP:...")
 		// because the latter makes a static call and it seems to be the right way when instrumenting like this.
