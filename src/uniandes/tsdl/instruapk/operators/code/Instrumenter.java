@@ -33,7 +33,8 @@ public class Instrumenter implements MutationOperator {
 
 		String cLine = lines.get(iter);
 		String parameters = extractParameters(t.getChild(1).toStringTree());
-		String methodAccessList = extractMethodAccessList(t);
+		String fileName = (new File(mLocation.getFilePath())).getName().split("\\.")[0];
+		String methodAccessList = extractMethodAccessList(t,fileName);
 		String methodName = t.getChild(0).toStringTree().trim();
 		//print("Line before: Line: :" + cLine + ": Parameters: " + parameters + " access list: " + methodAccessList);
 		while( /*Line should be a method*/
@@ -50,14 +51,14 @@ public class Instrumenter implements MutationOperator {
 				&& iter < lines.size()
 				) {
 			//print("Line while: Iter: "+  iter + " : Line: :" + cLine + ": Parameters: " + parameters + " access list: " + methodAccessList);
+			cLine = lines.get(iter);
 			newLines.add(cLine);
 			iter++;
-			cLine = lines.get(iter);
 		}
 		//At this point the method that is going to be instrumented was already found. If you wanna see it, uncomment the line below.
 		//print("Line after: iter: "+  iter + " Line: :" + cLine + ": Parameters: " + parameters + " access list: " + methodAccessList);
 		int nextIter = (iter+(tt.getLine()-t.getLine()));
-		for (int i = iter; i < nextIter; i++) {
+		for (int i = iter; i < nextIter && i < lines.size(); i++) {
 			String line = lines.get(i);
 			//Check the .locals lines and if it's less than 2, change it to be at least 2
 			line = lessThan2(line);
@@ -69,15 +70,15 @@ public class Instrumenter implements MutationOperator {
 		* */
 
 		iter=nextIter;
-		String fileName = (new File(mLocation.getFilePath())).getName().split("\\.")[0];
 		location.setMethodName(methodName);
 		location.setClassName(fileName);
 		location.setMethodParameters(parameters);
+		location.setMethodAccessList(methodAccessList);
 		newLines.add("    new-instance v0, Ljava/lang/StringBuilder;");
 		newLines.add("");
 		newLines.add("    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V");
 		newLines.add("");
-		newLines.add("    const-string v1, \"InstruAPK;;" + mutantIndex + ";;" +  fileName + ";;" + methodName + ";;"+ parameters + ";;"+"\"");
+		newLines.add("    const-string v1, \"InstruAPK;;" + mutantIndex + ";;" +  fileName + ";;" + methodName + ";;"+ parameters + ";;"+ methodAccessList +";;"+ "\"");
 		newLines.add("");
 		newLines.add("    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;");
 		newLines.add("");
@@ -145,10 +146,15 @@ public class Instrumenter implements MutationOperator {
 //		return method;
 //	}
 
-	private String extractMethodAccessList(CommonTree t){
+	private String extractMethodAccessList(CommonTree t, String fileName){
 		String accessList = t.getChild(2).toStringTree();
-		accessList = accessList.split("I_ACCESS_LIST ")[1];
-		accessList = accessList.split("[)]")[0].trim();
+		String[] accessListArray = accessList.split("I_ACCESS_LIST");
+		if(accessListArray.length > 0){
+			accessList = accessListArray[1].trim();
+			accessList = accessList.split("[)]")[0].trim();
+		}else{
+			accessList = "";
+		}
 		return accessList;
 	}
 	private boolean checkAccessList(String line, String searchMethodName, String expectedAccessList){

@@ -14,6 +14,7 @@ public class MutationLocation {
 	private String methodName;
 	private String className;
 	private String methodParameters;
+	private String methodAccessList;
 	
 	private MutationType type;
 	
@@ -33,33 +34,33 @@ public class MutationLocation {
 		this.line = line;
 	}
 
-	public int getStartColumn() {
-		return startColumn;
-	}
+//	public int getStartColumn() {
+//		return startColumn;
+//	}
 
 	public void setStartColumn(int startCoumn) {
 		this.startColumn = startCoumn;
 	}
 
-	public int getEndColumn() {
-		return endColumn;
-	}
+//	public int getEndColumn() {
+//		return endColumn;
+//	}
 
 	public void setEndColumn(int endColumn) {
 		this.endColumn = endColumn;
 	}
 
-	public int getStartLine() {
-		return startLine;
-	}
+//	public int getStartLine() {
+//		return startLine;
+//	}
 
 	public void setStartLine(int startLine) {
 		this.startLine = startLine;
 	}
 
-	public int getEndLine() {
-		return endLine;
-	}
+//	public int getEndLine() {
+//		return endLine;
+//	}
 
 	public void setEndLine(int endLine) {
 		this.endLine = endLine;
@@ -107,18 +108,31 @@ public class MutationLocation {
 		this.methodParameters = methodParameters;
 	}
 
-	public static MutationLocation buildLocation(String path, int startLine, int endLine, int startCol, int endCol, int lineNum, int length, MutationType mType) {
-		MutationLocation location = new MutationLocation();
-		location.setFilePath(path);
-		location.setStartLine(startLine);
-		location.setEndLine(endLine);
-		location.setStartColumn(startCol);
-		location.setEndColumn(endCol);
-		location.setType(mType);
-		location.setLine(lineNum);
-		location.setLength(length);
-		return location;
+//	public static MutationLocation buildLocation(String path, int startLine, int endLine, int startCol, int endCol, int lineNum, int length, MutationType mType) {
+//		MutationLocation location = new MutationLocation();
+//		location.setFilePath(path);
+//		location.setStartLine(startLine);
+//		location.setEndLine(endLine);
+//		location.setStartColumn(startCol);
+//		location.setEndColumn(endCol);
+//		location.setType(mType);
+//		location.setLine(lineNum);
+//		location.setLength(length);
+//		return location;
+//	}
+//
+
+	public void setMethodAccessList(String accessList){this.methodAccessList = accessList;}
+	public String getMethodAccessList(){return this.methodAccessList;}
+
+	@Override
+	public String toString() {
+		return "MutationLocation{" +
+				"filePath='" + filePath + '\'' +
+				", methodName='" + methodName + '\'' +
+				", className='" + className + '\'' +
+				", methodParameters='" + methodParameters + '\'' +
+				", methodAccessList='" + methodAccessList + '\'' +
+				'}';
 	}
-	
-	
 }

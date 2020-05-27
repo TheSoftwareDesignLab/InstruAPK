@@ -87,6 +87,7 @@ public class MutationsProcessor {
 			} catch (Exception e) {
 				Logger.getLogger(MutationsProcessor.class.getName())
 						.warning("- Error generating mutant  " + mutantIndex);
+				System.out.println("Error generating mutant: " + mutantIndex + " location :" + mutationLocation);
 				e.printStackTrace();
 			}
 			mutantIndex++;
