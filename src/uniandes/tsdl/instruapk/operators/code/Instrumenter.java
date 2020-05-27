@@ -33,50 +33,46 @@ public class Instrumenter implements MutationOperator {
 
 		String cLine = lines.get(iter);
 		String parameters = extractParameters(t.getChild(1).toStringTree());
-
-		//System.out.println("Line before: " + cLine + " Parameters: " + parameters);
-		while( /*Line should be a method*/ !(cLine.startsWith(".method")
+		String methodAccessList = extractMethodAccessList(t);
+		String methodName = t.getChild(0).toStringTree().trim();
+		//print("Line before: Line: :" + cLine + ": Parameters: " + parameters + " access list: " + methodAccessList);
+		while( /*Line should be a method*/
+			/*Be aware that this enclosing negation !() changes the inside condition, may be a little bit confusing at first but it is just logic*/
+				!(
+				cLine.startsWith(".method")
 				/*Line should contain the name of the method*/
-				&& cLine.contains(t.getChild(0).toStringTree())
+				&& cLine.contains(methodName)
 				/*Line should contain the parameters.*/
-				&& cLine.contains(parameters))
+				&& cLine.contains(parameters)
+				/*Line should contain the same access list values (public | private | protected | bridge | synthetic and so on)*/
+				&& checkAccessList(cLine,methodName,methodAccessList)
+		)
 				&& iter < lines.size()
 				) {
-			//System.out.println("Line while "+  iter + " : " + cLine + " Parameters: " + parameters);
+			//print("Line while: Iter: "+  iter + " : Line: :" + cLine + ": Parameters: " + parameters + " access list: " + methodAccessList);
 			newLines.add(cLine);
 			iter++;
 			cLine = lines.get(iter);
 		}
-		//At this point the method that is going to be instrumented was already found. If what to see it, uncomment the line below.
-		//System.out.println("Line After: " + cLine + " Parameters: " + parameters);
-
-		for (int i = iter; i < (iter+(tt.getLine()-t.getLine())); i++) {
+		//At this point the method that is going to be instrumented was already found. If you wanna see it, uncomment the line below.
+		//print("Line after: iter: "+  iter + " Line: :" + cLine + ": Parameters: " + parameters + " access list: " + methodAccessList);
+		int nextIter = (iter+(tt.getLine()-t.getLine()));
+		for (int i = iter; i < nextIter; i++) {
 			String line = lines.get(i);
 			//Check the .locals lines and if it's less than 2, change it to be at least 2
-			line = lessThan2(line,mutantIndex);
-			//Not needed because the parameters aren't going to be moved.
-			//takeMaxParam(line);
+			line = lessThan2(line);
+			//print("line to be write before instrumentation: " + line);
 			newLines.add(line);
 		}
+		/*Here there used to be a while trying to find the next line to be instrumented but this job is successfully done by the for above
+		* now the tool is able to write the annotations without problems
+		* */
 
-		iter=(iter+(tt.getLine()-t.getLine()));
-		newLines.add(lines.get(iter++));
-		if( iter < lines.size() && lines.get(iter).equals("    .end annotation")){
-			System.out.println("line inside: " + lines.get(iter));
-			newLines.add(lines.get(iter++));
-		}
-		//
-
-		// The method System.out.println("RIP:...") was changed for a Log.d("","RIP:...")
-		// because the latter makes a static call and it seems to be the right way when instrumenting like this.
-		// Also, the same number of registers are needed when using sysout
-		String methodName = t.getChild(0).toStringTree();
-		//File name TODO change for the real class name
+		iter=nextIter;
 		String fileName = (new File(mLocation.getFilePath())).getName().split("\\.")[0];
 		location.setMethodName(methodName);
 		location.setClassName(fileName);
 		location.setMethodParameters(parameters);
-		newLines.add("");
 		newLines.add("    new-instance v0, Ljava/lang/StringBuilder;");
 		newLines.add("");
 		newLines.add("    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V");
@@ -100,8 +96,8 @@ public class Instrumenter implements MutationOperator {
 		newLines.add("    invoke-static {v1, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I");
 		newLines.add("");
 
-		for(int i=iter; i < lines.size() ; i++) {
-			newLines.add(lines.get(i));
+		while(iter < lines.size()){
+			newLines.add(lines.get(iter++));
 		}
 
 		FileHelper.writeLines(location.getFilePath(), newLines);
@@ -128,11 +124,39 @@ public class Instrumenter implements MutationOperator {
 		return parameters.replace(" ","");
 	}
 
-	private String lessThan2(String cLine, int mutantIndex){
+	private String lessThan2(String cLine){
 		if(cLine.equals("    .locals 0") || cLine.equals("    .locals 1") || cLine.equals("    .locals 2")){
 			System.out.println("Register's number has been changed");
 			return "	.locals 3";
 		}
 		return  cLine;
+	}
+
+//	private String extractMethod(int iter, List<String> lines){
+//		int fakeIter = iter;
+//		String method = "";
+//		System.out.println("line in iter " + lines.get(iter));
+//		System.out.println("line in fake iter: " + lines.get(fakeIter));
+//		while(!lines.get(fakeIter).equals(".end method")){
+//			method += " " + lines.get(fakeIter);
+//			fakeIter++;
+//		}
+//		method += " " + lines.get(fakeIter);
+//		return method;
+//	}
+
+	private String extractMethodAccessList(CommonTree t){
+		String accessList = t.getChild(2).toStringTree();
+		accessList = accessList.split("I_ACCESS_LIST ")[1];
+		accessList = accessList.split("[)]")[0].trim();
+		return accessList;
+	}
+	private boolean checkAccessList(String line, String searchMethodName, String expectedAccessList){
+		String currentAccessList = line.split("\\.method")[1];
+		currentAccessList = currentAccessList.split(searchMethodName)[0].trim();
+		return currentAccessList.equals(expectedAccessList);
+	}
+	private void print(String value){
+		System.out.println(value);
 	}
 }
