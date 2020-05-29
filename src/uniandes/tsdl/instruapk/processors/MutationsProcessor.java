@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -94,130 +95,26 @@ public class MutationsProcessor {
 		}
 		try {
 			System.out.println("Mutant Root Folder: " + mutantsRootFolder);
-			boolean result = APKToolWrapper.buildAPK(mutantRootFolder, extraPath, apkName, 0);
+			boolean result = APKToolWrapper.buildAPK(this.getMutantsRootFolder(), extraPath, apkName, 0);
 			if(result) {FileUtils.deleteDirectory(new File(mutantRootFolder + "src" + File.separator));}
 		}catch (Exception e ){
-			System.out.println("There was an exception: \n stack trace: " + e.getStackTrace() + "\n message: " + e.getMessage());
+			System.out.println("There was an exception: \n stack trace: " + Arrays.toString(e.getStackTrace()) + "\n message: " + e.getMessage());
 			e.printStackTrace();
 		}
 		writer.close();
 		wwriter.close();
 	}
 
-	public void processMultithreaded(List<MutationLocation> locations, final String extraPath, final String apkName)
-			throws IOException {
-
-		final BufferedWriter writer = new BufferedWriter(
-				new FileWriter(getMutantsRootFolder() + File.separator + getAppName() + "-mutants.log"));
-		final BufferedWriter wwriter = new BufferedWriter(
-				new FileWriter(getMutantsRootFolder() + File.separator + getAppName() + "-times.csv"));
-		wwriter.write("mutantIndex;mutantType;copyingTime;mutationTime;buildingTime");
-		wwriter.newLine();
-		wwriter.flush();
-		final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-		final List<Future<String>> results = new LinkedList<Future<String>>();
-
-		writer.write("ThreadPool: "+Runtime.getRuntime().availableProcessors()+"\n");
-		int mutantIndex = 0;
-
-		for (final MutationLocation mutationLocation : locations) {
-			mutantIndex++;
-			final int currentMutationIndex = mutantIndex;
-			Long copyingIni = System.currentTimeMillis();
-			System.out.println("Mutant: " + currentMutationIndex + " - " + mutationLocation.getType().getName());
-			setupMutantFolder(currentMutationIndex);
-			Long copyingEnd = System.currentTimeMillis();
-			Long copyingTime = copyingEnd - copyingIni;
-			wwriter.write(currentMutationIndex+";"+mutationLocation.getType().getId()+";"+copyingTime+";0;0");
-			wwriter.newLine();
-			wwriter.flush();
-			results.add(executor.submit(new Callable<String>() {
-
-				public String call() {
-					try {
-						// Select operator
-						Long mutationIni = System.currentTimeMillis();
-						MutationOperatorFactory factory = MutationOperatorFactory.getInstance();
-						MutationOperator operator = factory.getOperator(mutationLocation.getType().getId());
-
-						// Set up folders
-						String mutantRootFolder = getMutantsRootFolder() + File.separator + getAppName() + "-mutant"
-								+ currentMutationIndex + File.separator;
-						String mutantFolder = mutantRootFolder + "src" + File.separator;
-						String newMutationPath = mutationLocation.getFilePath().replace(appFolder, mutantFolder);
-						mutationLocation.setFilePath(newMutationPath);
-
-						// Perform mutation
-						operator.performMutation(mutationLocation, writer, currentMutationIndex);
-						Long mutationEnd = System.currentTimeMillis();
-						boolean result = APKToolWrapper.buildAPK(mutantRootFolder, extraPath, apkName, currentMutationIndex);
-						File mutatedFile = new File(newMutationPath);
-						String fileName = (new File(newMutationPath)).getName();
-						File mutantRootFolderDir = new File(mutantRootFolder+fileName);
-						FileUtils.copyFile(mutatedFile, mutantRootFolderDir);
-						File srcFolder = new File(mutantFolder);
-						if(result) {FileUtils.deleteDirectory(srcFolder);}
-						Long buildEnd = System.currentTimeMillis();
-						Long mutationTime = mutationEnd-mutationIni;
-						Long buildingTime = buildEnd - mutationEnd;
-						wwriter.write(currentMutationIndex+";"+mutationLocation.getType().getId()+";0;"+mutationTime+";"+buildingTime);
-						wwriter.newLine();
-						wwriter.flush();
-						// writer.close();
-
-					} catch (Exception e) {
-						Logger.getLogger(MutationsProcessor.class.getName())
-								.warning("- Error generating mutant  " + currentMutationIndex);
-						e.printStackTrace();
-					}
-
-					return "";
-				}
-			}));
-		}
-
-		// If more output for single operator is needed
-		// FileOutputStream out = new
-		// FileOutputStream(getMutantsRootFolder()+File.separator+getAppName()+"-process.log");
-		// PrintStream pout = new PrintStream(out);
-		// for (Future<String> result : results) {
-		// try {
-		// pout.print(result.get());
-		// } catch (Exception e) {
-		// e.printStackTrace();
-		// }
-		// }
-		// pout.flush();
-		// pout.close();
-
-		executor.shutdown();
-		if (executor.isTerminated()) {
-			writer.close();
-		}
-	}
-
 	public String getAppFolder() {
 		return appFolder;
-	}
-
-	public void setAppFolder(String appFolder) {
-		this.appFolder = appFolder;
 	}
 
 	public String getAppName() {
 		return appName;
 	}
 
-	public void setAppName(String appName) {
-		this.appName = appName;
-	}
-
 	public String getMutantsRootFolder() {
 		return mutantsRootFolder;
-	}
-
-	public void setMutantsRootFolder(String mutantsRootFolder) {
-		this.mutantsRootFolder = mutantsRootFolder;
 	}
 
 }

@@ -23,13 +23,19 @@ public class APKToolWrapper {
 	public static boolean buildAPK(String path, String extraPath, String appName, int mutantIndex) throws IOException, InterruptedException{
 		String decodedPath = Helper.getInstance().getCurrentDirectory();
 		String firstArg = Paths.get(decodedPath,extraPath,"apktool.jar").toAbsolutePath().toString();
+		//System.out.println("decodedPath: " + decodedPath + " path: " + path);
 		String secondArg = Paths.get(decodedPath,path,"src").toAbsolutePath().toString();
 		String thirdArg = Paths.get(decodedPath,path,appName).toAbsolutePath().toString();
-		System.out.println("first: " + extraPath + ":"+ firstArg + " second " + path + ":" +secondArg + " third: " + appName +":"+ thirdArg);
+		//System.out.println("first: " + extraPath + ":"+ firstArg + " second " + path + ":" +secondArg + " third: " + appName +":"+ thirdArg);
 		Process ps = Runtime.getRuntime().exec(new String[]{"java","-jar",firstArg,"b",secondArg,"-o",thirdArg,"-f"});
 		System.out.println("Building mutant "+mutantIndex+"...");
 		ps.waitFor();
-		Process pss = Runtime.getRuntime().exec(new String[]{"java","-jar",Paths.get(decodedPath,extraPath,"uber-apk-signer.jar").toAbsolutePath().toString(),"-a",Paths.get(decodedPath,path).toAbsolutePath().toString(),"-o",Paths.get(decodedPath,path).toAbsolutePath().toString()});
+		firstArg = Paths.get(decodedPath,extraPath,"uber-apk-signer.jar").toAbsolutePath().toString();
+		secondArg = Paths.get(decodedPath,path).toAbsolutePath().toString();
+		thirdArg = Paths.get(decodedPath,path).toAbsolutePath().toString();
+		//System.out.println("APK SIGNER VALUES");
+		//System.out.println("first: " + extraPath + ":"+ firstArg + " second " + path + ":" +secondArg + " third: " + appName +":"+ thirdArg);
+		Process pss = Runtime.getRuntime().exec(new String[]{"java","-jar",firstArg,"-a",secondArg,"-o",thirdArg});
 		System.out.println("Signing mutant "+mutantIndex+"...");
 		pss.waitFor();
 		if(Files.exists(Paths.get(decodedPath,path,appName).toAbsolutePath())) {
