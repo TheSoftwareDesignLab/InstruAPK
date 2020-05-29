@@ -59,6 +59,7 @@ public class MutationsProcessor {
 		wwriter.flush();
 		//crete just one copy of the folder
 		setupMutantFolder(0);
+		boolean errorFound = false;
 		for (MutationLocation mutationLocation : locations) {
 			try {
 				Long mutationIni = System.currentTimeMillis();
@@ -67,8 +68,8 @@ public class MutationsProcessor {
 				operator = factory.getOperator(mutationLocation.getType().getId());
 
 				//Same file name, same folder modified
-				mutantRootFolder = getMutantsRootFolder() + File.separator + getAppName() + "-mutant" + 0 + File.separator;
-				mutantFolder = mutantRootFolder + "src" + File.separator;
+				setMutantRootFolder(getMutantsRootFolder() + File.separator + getAppName() + "-mutant" + 0 + File.separator);
+				mutantFolder = getMutantRootFolder() + "src" + File.separator;
 				// The mutant should be written in mutantFolder
 				newMutationPath = mutationLocation.getFilePath().replace(appFolder, mutantFolder);
 				// System.out.println(newMutationPath);
@@ -77,7 +78,7 @@ public class MutationsProcessor {
 				Long mutationEnd = System.currentTimeMillis();
 				File mutatedFile = new File(newMutationPath);
 				String fileName = (new File(newMutationPath)).getName();
-				File mutantRootFolderDir = new File(mutantRootFolder+fileName);
+				File mutantRootFolderDir = new File(getMutantRootFolder()+fileName);
 				FileUtils.copyFile(mutatedFile, mutantRootFolderDir);
 				Long buildEnd = System.currentTimeMillis();
 				Long mutationTime = mutationEnd-mutationIni;
@@ -86,6 +87,7 @@ public class MutationsProcessor {
 				wwriter.newLine();
 				wwriter.flush();
 			} catch (Exception e) {
+				errorFound = true;
 				Logger.getLogger(MutationsProcessor.class.getName())
 						.warning("- Error generating mutant  " + mutantIndex);
 				System.out.println("Error generating mutant: " + mutantIndex + " location :" + mutationLocation);
@@ -94,9 +96,11 @@ public class MutationsProcessor {
 			mutantIndex++;
 		}
 		try {
-			System.out.println("Mutant Root Folder: " + mutantsRootFolder);
-			boolean result = APKToolWrapper.buildAPK(this.getMutantsRootFolder(), extraPath, apkName, 0);
-			if(result) {FileUtils.deleteDirectory(new File(mutantRootFolder + "src" + File.separator));}
+			if(!errorFound){
+				System.out.println("Mutant Root Folder: " + getMutantsRootFolder());
+				boolean result = APKToolWrapper.buildAPK(getMutantRootFolder(), extraPath, apkName, 0);
+				if(result) {FileUtils.deleteDirectory(new File(mutantRootFolder + "src" + File.separator));}
+			}
 		}catch (Exception e ){
 			System.out.println("There was an exception: \n stack trace: " + Arrays.toString(e.getStackTrace()) + "\n message: " + e.getMessage());
 			e.printStackTrace();
@@ -113,8 +117,18 @@ public class MutationsProcessor {
 		return appName;
 	}
 
+	public void setMutantsRootFolder(String mutantsRootFolder){
+		this.mutantsRootFolder = mutantsRootFolder;
+	}
+
 	public String getMutantsRootFolder() {
 		return mutantsRootFolder;
 	}
 
+	public void setMutantRootFolder(String mutantRootFolder){
+		this.mutantRootFolder = mutantRootFolder;
+	}
+	public String getMutantRootFolder(){
+		return  this.mutantRootFolder;
+	}
 }
