@@ -163,12 +163,14 @@ public class Instrumenter implements MutationOperator {
 		if(!expectedAccessList.equals("")){
 			correctAccessList = line.split(expectedAccessList).length>1;
 		}
+		if(!correctAccessList){return false;}
 		String params = expectedParameters.replace("[","\\[");
 		params = params.replace("(","\\(");
 		params = params.replace(")","\\)");
 		params = params.replace("$","\\$");
 		params = params.replace("/","\\/");
 		boolean correctMethodParameters =  line.split(params).length>1;
+		if(!correctMethodParameters){return false;}
 		boolean correctMethodName = false;
 		if(correctAccessList && correctMethodParameters){
 			String extraAndName = line.split(params)[0];
@@ -180,7 +182,7 @@ public class Instrumenter implements MutationOperator {
 			}
 			correctMethodName = name.equals(expectedMethodName);
 		}
-		return correctAccessList && correctMethodName && correctMethodParameters;
+		return correctMethodName;
 	}
 	private void print(String value){
 		System.out.println(value);
