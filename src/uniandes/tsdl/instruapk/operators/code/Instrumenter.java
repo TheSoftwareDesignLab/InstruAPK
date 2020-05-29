@@ -171,18 +171,15 @@ public class Instrumenter implements MutationOperator {
 		params = params.replace("/","\\/");
 		boolean correctMethodParameters =  line.split(params).length>1;
 		if(!correctMethodParameters){return false;}
-		boolean correctMethodName = false;
-		if(correctAccessList && correctMethodParameters){
-			String extraAndName = line.split(params)[0];
-			String name = "";
-			if(!expectedAccessList.equals("")){
-				name = extraAndName.split(expectedAccessList)[1].trim();
-			}else{
-				name = extraAndName.split("\\.method ")[1].trim();
-			}
-			correctMethodName = name.equals(expectedMethodName);
+
+		String extraAndName = line.split(params)[0];
+		String name = "";
+		if(!expectedAccessList.equals("")){
+			name = extraAndName.split(expectedAccessList)[1].trim();
+		}else{
+			name = extraAndName.split("\\.method ")[1].trim();
 		}
-		return correctMethodName;
+		return name.equals(expectedMethodName);
 	}
 	private void print(String value){
 		System.out.println(value);
