@@ -97,6 +97,7 @@ public class MutationsProcessor {
 			boolean result = APKToolWrapper.buildAPK(mutantRootFolder, extraPath, apkName, 0);
 			if(result) {FileUtils.deleteDirectory(new File(mutantRootFolder + "src" + File.separator));}
 		}catch (Exception e ){
+			System.out.println("There was an exception: \n stack trace: " + e.getStackTrace() + "\n message: " + e.getMessage());
 			e.printStackTrace();
 		}
 		writer.close();

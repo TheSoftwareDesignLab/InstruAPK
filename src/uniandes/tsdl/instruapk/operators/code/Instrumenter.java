@@ -2,7 +2,9 @@ package uniandes.tsdl.instruapk.operators.code;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.antlr.runtime.tree.CommonTree;
@@ -36,27 +38,25 @@ public class Instrumenter implements MutationOperator {
 		String fileName = (new File(mLocation.getFilePath())).getName().split("\\.")[0];
 		String methodAccessList = extractMethodAccessList(t,fileName);
 		String methodName = t.getChild(0).toStringTree().trim();
-		//print("Line before: Line: :" + cLine + ": Parameters: " + parameters + " access list: " + methodAccessList);
+		//print("Line before: Line: :" + cLine + ": Parameters: " + parameters + " access list: " + methodAccessList + " method name: " +  methodName);
 		while( /*Line should be a method*/
 			/*Be aware that this enclosing negation !() changes the inside condition, may be a little bit confusing at first but it is just logic*/
 				!(
 				cLine.startsWith(".method")
 				/*Line should contain the name of the method*/
-				&& cLine.contains(methodName)
 				/*Line should contain the parameters.*/
-				&& cLine.contains(parameters)
 				/*Line should contain the same access list values (public | private | protected | bridge | synthetic and so on)*/
-				&& checkAccessList(cLine,methodName,methodAccessList)
+				&& checkMethod(cLine,methodName,methodAccessList,parameters)
 		)
 				&& iter < lines.size()
 				) {
-			//print("Line while: Iter: "+  iter + " : Line: :" + cLine + ": Parameters: " + parameters + " access list: " + methodAccessList);
+			//print("Line while: Iter: "+  iter + " : Line: :" + cLine + ": Parameters: " + parameters + " access list: " + methodAccessList + " method name: " +  methodName);
 			cLine = lines.get(iter);
 			newLines.add(cLine);
 			iter++;
 		}
 		//At this point the method that is going to be instrumented was already found. If you wanna see it, uncomment the line below.
-		//print("Line after: iter: "+  iter + " Line: :" + cLine + ": Parameters: " + parameters + " access list: " + methodAccessList);
+		//print("Line after: iter: "+  iter + " Line: :" + cLine + ": Parameters: " + parameters + " access list: " + methodAccessList + " method name: " +  methodName);
 		int nextIter = (iter+(tt.getLine()-t.getLine()));
 		for (int i = iter; i < nextIter && i < lines.size(); i++) {
 			String line = lines.get(i);
@@ -157,10 +157,30 @@ public class Instrumenter implements MutationOperator {
 		}
 		return accessList;
 	}
-	private boolean checkAccessList(String line, String searchMethodName, String expectedAccessList){
-		String currentAccessList = line.split("\\.method")[1];
-		currentAccessList = currentAccessList.split(searchMethodName)[0].trim();
-		return currentAccessList.equals(expectedAccessList);
+
+	private boolean checkMethod(String line, String expectedMethodName, String expectedAccessList, String expectedParameters){
+		boolean correctAccessList = true;
+		if(!expectedAccessList.equals("")){
+			correctAccessList = line.split(expectedAccessList).length>1;
+		}
+		String params = expectedParameters.replace("[","\\[");
+		params = params.replace("(","\\(");
+		params = params.replace(")","\\)");
+		params = params.replace("$","\\$");
+		params = params.replace("/","\\/");
+		boolean correctMethodParameters =  line.split(params).length>1;
+		boolean correctMethodName = false;
+		if(correctAccessList && correctMethodParameters){
+			String extraAndName = line.split(params)[0];
+			String name = "";
+			if(!expectedAccessList.equals("")){
+				name = extraAndName.split(expectedAccessList)[1].trim();
+			}else{
+				name = extraAndName.split("\\.method ")[1].trim();
+			}
+			correctMethodName = name.equals(expectedMethodName);
+		}
+		return correctAccessList && correctMethodName && correctMethodParameters;
 	}
 	private void print(String value){
 		System.out.println(value);
