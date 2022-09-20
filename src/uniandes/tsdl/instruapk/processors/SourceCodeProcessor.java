@@ -48,14 +48,33 @@ public class SourceCodeProcessor {
 
 	public HashMap<MutationType, List<MutationLocation>> processFolder(String folderPath, String extrasFolder, String packageName) throws IOException{
 		HashMap<MutationType, List<MutationLocation>> locations = new HashMap<>();
-		folderPath = folderPath+File.separator+"smali";
-		Collection<File> files = FileUtils.listFiles(new File(folderPath), TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
+		String folderPathh = folderPath+File.separator+"smali";
+		System.out.println(folderPathh);
+		Collection<File> files = FileUtils.listFiles(new File(folderPathh), TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
 		for (File file : files) {
 			if(file.getName().endsWith(".smali") && file.getCanonicalPath().contains(packageName.replace(".", Helper.isWindows()?"\\":"/"))
 					&& !file.getName().contains("EmmaInstrumentation.java") && !file.getName().contains("FinishListener.java") && !file.getName().contains("InstrumentedActivity.java") && !file.getName().contains("SMSInstrumentedReceiver.java")){
-				HashMap<MutationType, List<MutationLocation>> fileLocations = processFile(file.getAbsolutePath(), folderPath, extrasFolder);
+				HashMap<MutationType, List<MutationLocation>> fileLocations = processFile(file.getAbsolutePath(), folderPathh, extrasFolder);
 				appendLocations(fileLocations, locations);
 			}
+		}
+		boolean termino = false;
+		for (int i = 2; i < 10 && !termino; i++) {
+			folderPathh = folderPath+File.separator+"smali_classes"+i;
+			System.out.println(folderPathh);
+			if ((new File(folderPathh)).exists()) {
+				files = FileUtils.listFiles(new File(folderPathh), TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
+				for (File file : files) {
+					if(file.getName().endsWith(".smali") && file.getCanonicalPath().contains(packageName.replace(".", Helper.isWindows()?"\\":"/"))
+							&& !file.getName().contains("EmmaInstrumentation.java") && !file.getName().contains("FinishListener.java") && !file.getName().contains("InstrumentedActivity.java") && !file.getName().contains("SMSInstrumentedReceiver.java")){
+						HashMap<MutationType, List<MutationLocation>> fileLocations = processFile(file.getAbsolutePath(), folderPathh, extrasFolder);
+						appendLocations(fileLocations, locations);
+					}
+				}
+			} else {
+				termino = true;
+			}
+
 		}
 		return locations;
 	}

@@ -4,7 +4,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +34,6 @@ public class InstruAPK {
 		} catch (NumberFormatException e) {
 			System.out.println("Amount of mutants parameter is not a number!");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -83,8 +81,8 @@ public class InstruAPK {
 		//1. Create hashmap for locations
 		HashMap<MutationType, List<MutationLocation>> locations = new HashMap<>();
 
-		// //2. Run detection phase for AST-based detectors
-		// //2.1 Preprocessing: Find locations to target API calls
+		// 2. Run detection phase for AST-based detectors
+		// 2.1 Preprocessing: Find locations to target API calls
 		SourceCodeProcessor scp = new SourceCodeProcessor(operatorBundle);
 		locations.putAll( scp.processFolder("temp", extraPath, appName));
 

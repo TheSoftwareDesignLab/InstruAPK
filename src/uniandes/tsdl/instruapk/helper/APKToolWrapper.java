@@ -20,8 +20,16 @@ public class APKToolWrapper {
 		ps.waitFor();
 		System.out.println("Wow... that was an amazing APK to process!!! :D");
 	}
+	
+	
 	public static boolean buildAPK(String path, String extraPath, String appName, int mutantIndex) throws IOException, InterruptedException{
 		String decodedPath = Helper.getInstance().getCurrentDirectory();
+		File tempFolder = new File(decodedPath+File.separator+"apk");
+		if(tempFolder.exists()) {
+			tempFolder.delete();
+		}
+		tempFolder.mkdirs();
+//		Process ps = Runtime.getRuntime().exec(new String[]{"java","-jar",Paths.get(decodedPath,extraPath,"apktool.jar").toAbsolutePath().toString(),"b",Paths.get(decodedPath,path,"src").toAbsolutePath().toString(),"-o",Paths.get(decodedPath,path,decodedPath,appName).toAbsolutePath().toString(),"-f"});
 		String firstArg = Paths.get(decodedPath,extraPath,"apktool.jar").toAbsolutePath().toString();
 		//System.out.println("decodedPath: " + decodedPath + " path: " + path);
 		String secondArg = Paths.get(decodedPath,path,"src").toAbsolutePath().toString();
